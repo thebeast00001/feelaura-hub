@@ -48,18 +48,13 @@ export function isValidPincode(pin: string): boolean {
 export function checkDelivery(pin: string): DeliveryInfo | null {
   if (!isValidPincode(pin)) return null;
 
-  // A small deterministic set of unserviceable pins (remote areas)
-  const digitSum = pin.split("").reduce((n, d) => n + Number(d), 0);
-  if (pin[0] === "9" || digitSum % 17 === 0) {
-    return { serviceable: false, sameDay: false, etaDays: -1, region: REGIONS[pin[0]] ?? "India" };
-  }
-
+  // We deliver everywhere in India. Metros get same-day; elsewhere is a
+  // short deterministic ETA.
   const metro = METRO_PREFIXES[pin.slice(0, 2)];
   if (metro) {
     return { serviceable: true, sameDay: true, etaDays: 0, region: metro };
   }
 
-  // 2–4 day ETA for everywhere else, derived deterministically
   const etaDays = 2 + (Number(pin[5]) % 3);
   return { serviceable: true, sameDay: false, etaDays, region: REGIONS[pin[0]] ?? "India" };
 }
