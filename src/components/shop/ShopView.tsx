@@ -5,7 +5,6 @@ import { cn, formatPrice } from "@/lib/utils";
 import ProductCard from "@/components/ui/ProductCard";
 import Reveal from "@/components/ui/Reveal";
 import SortSelect from "./SortSelect";
-import StickyBar from "./StickyBar";
 
 type ParamValue = string | string[] | undefined;
 
@@ -96,8 +95,8 @@ export default function ShopView({
         )}
       </Reveal>
 
-      {/* Category pill bar — sticky on mobile, slides away while scrolling down */}
-      <StickyBar className="sticky top-[4.5rem] z-30 -mx-5 mt-8 bg-cream/85 px-5 py-3 backdrop-blur-xl sm:-mx-8 sm:px-8 md:top-[5.5rem] lg:static lg:mx-0 lg:mt-10 lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+      {/* Category pill bar — static (scrolls with the page), horizontally scrollable */}
+      <div className="-mx-5 mt-8 px-5 sm:-mx-8 sm:px-8 lg:mx-0 lg:mt-10 lg:p-0">
         <div className="no-scrollbar flex gap-2 overflow-x-auto lg:flex-wrap">
           <Link
             href={buildHref("/shop", params, { page: undefined })}
@@ -125,7 +124,7 @@ export default function ShopView({
             </Link>
           ))}
         </div>
-      </StickyBar>
+      </div>
 
       {/* Toolbar */}
       <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border-y border-line py-4">

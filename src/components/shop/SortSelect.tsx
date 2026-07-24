@@ -88,7 +88,7 @@ export default function SortSelect({ current }: { current: string }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.97 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute right-0 top-full z-40 mt-2 w-52 origin-top-right rounded-[1.4rem] border border-line bg-cream p-1.5 shadow-[0_24px_48px_-16px_rgb(27_23_18/0.3)]"
+            className="absolute top-full z-40 mt-2 w-52 rounded-[1.4rem] border border-line bg-cream p-1.5 shadow-[0_24px_48px_-16px_rgb(27_23_18/0.3)] max-sm:left-0 max-sm:origin-top-left sm:right-0 sm:origin-top-right"
           >
             {OPTIONS.map(([value, label]) => {
               const active = value === current;

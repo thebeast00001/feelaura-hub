@@ -206,7 +206,10 @@ export default function CartDrawer() {
                   </AnimatePresence>
                 </ul>
 
-                <Suggestions />
+                {/* Suggestions crowd the bottom sheet on phones — desktop drawer only */}
+                <div className="max-sm:hidden">
+                  <Suggestions />
+                </div>
 
                 <div className="border-t border-line px-6 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-5">
                   {cartSavings(items) > 0 && (
