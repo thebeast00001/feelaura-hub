@@ -1,0 +1,258 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   BRAND TOKENS — swap these when the client's real brand arrives.
+--------------------------------------------------------------------------- */
+@theme {
+  --color-cream: #f6f3ed;
+  --color-cream-soft: #efe9df;
+  --color-surface: #ffffff;
+  --color-ink: #1b1712;
+  --color-ink-soft: #57503f;
+  --color-ink-faint: #8a8271;
+  --color-accent: #bc4a25;
+  --color-accent-deep: #96371a;
+  --color-gold: #c9a227;
+  --color-sage: #8fa383;
+  --color-line: #ded7c9;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-swift: cubic-bezier(0.55, 0, 0.1, 1);
+
+  --animate-marquee: marquee 32s linear infinite;
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  --font-display: "Fraunces Variable", Georgia, serif;
+  --font-sans: "Manrope Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ---------------------------------------------------------------------------
+   DARK MODE — flips the whole site via tokens. Toggled by data-theme on <html>.
+--------------------------------------------------------------------------- */
+html[data-theme="dark"] {
+  --color-cream: #15120e;
+  --color-cream-soft: #1e1a14;
+  --color-surface: #241f18;
+  --color-ink: #f1ece2;
+  --color-ink-soft: #b9b0a0;
+  --color-ink-faint: #837b6c;
+  --color-line: #332c23;
+  color-scheme: dark;
+}
+
+/* ---------------------------------------------------------------------------
+   BASE
+--------------------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  /* Kill the grey/black flash mobile browsers paint on tapped elements */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Slim, rounded, theme-matched scrollbar (Chromium / Safari) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 999px;
+  border: 3px solid var(--color-cream);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-faint);
+}
+/* Firefox */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-line) transparent;
+  }
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-cream);
+}
+
+/* Keyboard focus ring — layered so `outline-none` on pill fields can override */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: none;
+  }
+}
+
+/* iOS Safari zooms the page when focusing inputs under 16px — prevent it
+   by enforcing 16px form text on small screens. */
+@media (max-width: 40rem) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Lenis smooth-scroll hooks */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+/* ---------------------------------------------------------------------------
+   UTILITIES
+--------------------------------------------------------------------------- */
+@utility container-x {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 80rem;
+  padding-inline: 1.25rem;
+  @media (width >= 40rem) { padding-inline: 2rem; }
+  @media (width >= 64rem) { padding-inline: 3rem; }
+}
+
+@utility text-display {
+  font-family: var(--font-display);
+  /* Fraunces personality axes: WONK = quirky artisanal letterforms,
+     SOFT = warm rounded terminals, high opsz = elegant display cut */
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+  font-optical-sizing: none;
+  letter-spacing: -0.015em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+/* Outlined display text — hollow letterforms for oversized brand moments */
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--color-line);
+  paint-order: stroke fill;
+}
+
+/* Animated underline for nav / inline links */
+@utility link-underline {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 1.5px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s var(--ease-out-expo);
+  }
+  &:hover::after,
+  &[aria-current="page"]::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* Hide scrollbars on horizontal pill bars */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* One UI-style section chip */
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background: color-mix(in oklab, var(--color-accent) 10%, transparent);
+  color: var(--color-accent);
+  padding: 0.45rem 1rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+/* Card hover lift used across product grids */
+@utility card-lift {
+  transition:
+    transform 0.6s var(--ease-out-expo),
+    box-shadow 0.6s var(--ease-out-expo);
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px -24px rgb(27 23 18 / 0.25);
+  }
+}
+
+/* Tactile press feedback for cards & tiles */
+@utility press {
+  transition: transform 0.25s var(--ease-out-expo);
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer-sweep {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+.skeleton {
+  border-radius: 1rem;
+  background: linear-gradient(
+    100deg,
+    var(--color-cream-soft) 40%,
+    color-mix(in oklab, var(--color-cream-soft) 60%, var(--color-surface)) 50%,
+    var(--color-cream-soft) 60%
+  );
+  background-size: 200% 100%;
+  animation: shimmer-sweep 1.6s linear infinite;
+}
+
+/* Intro loader — pure CSS so it animates before React hydrates */
+@keyframes intro-bar-fill {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+.intro-bar {
+  transform: translateX(-100%);
+  animation: intro-bar-fill 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+}
+@keyframes intro-dot-pop {
+  0% { opacity: 0; transform: scale(0.3); }
+  60% { transform: scale(1.3); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.intro-dot {
+  display: inline-block;
+  animation: intro-dot-pop 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
