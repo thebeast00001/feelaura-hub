@@ -17,7 +17,7 @@ export default function Marquee({
   const row = [...half, ...half];
 
   return (
-    <div className={cn("overflow-hidden border-y border-line py-4", className)} aria-hidden>
+    <div className={cn("overflow-hidden py-4", className)} aria-hidden>
       <div className="flex w-max animate-marquee items-center gap-8 whitespace-nowrap will-change-transform">
         {row.map((item, i) => (
           <span key={i} className="flex items-center gap-8">

@@ -11,6 +11,7 @@ import { useRecentlyViewed } from "@/lib/recently-viewed-store";
 import { useViewing } from "@/lib/viewing-store";
 import { useReminders } from "@/lib/reminders-store";
 import { getUpcoming } from "@/lib/reminder-utils";
+import { useAuthState } from "@/lib/auth-store";
 import { deliveryStage, STAGE_LABELS } from "@/lib/delivery-stages";
 import { useMounted } from "@/lib/use-mounted";
 import { flyToCart } from "@/lib/fly";
@@ -39,6 +40,7 @@ export default function NowBar() {
   const lastViewed = useRecentlyViewed((s) => s.items[0]);
   const reminders = useReminders((s) => s.reminders);
   const upcomingReminder = getUpcoming(reminders)[0];
+  const signedIn = useAuthState((s) => s.signedIn);
 
   const [index, setIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
@@ -53,9 +55,11 @@ export default function NowBar() {
   const onProduct = pathname.startsWith("/product/");
   const activities: Activity[] = [];
   if (onProduct && viewing) activities.push("product");
-  if (active) activities.push("delivery");
+  // Delivery tracking & occasion reminders are personal account features —
+  // only surface them to signed-in users (or when auth isn't configured).
+  if (active && signedIn) activities.push("delivery");
   if (items.length > 0) activities.push("cart");
-  if (upcomingReminder && upcomingReminder.days <= 30) activities.push("reminder");
+  if (upcomingReminder && upcomingReminder.days <= 30 && signedIn) activities.push("reminder");
   if (lastViewed && !onProduct) activities.push("continue");
 
   useEffect(() => {
@@ -87,7 +91,7 @@ export default function NowBar() {
           onClick={showBar}
           className="pointer-events-auto flex items-center gap-2 rounded-full bg-ink/90 px-4 py-2 text-xs font-semibold text-cream shadow-[0_12px_30px_-12px_rgba(0,0,0,0.6)] backdrop-blur"
         >
-          {active ? (
+          {active && signedIn ? (
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-gold/70" />
               <span className="relative inline-flex size-2 rounded-full bg-gold" />

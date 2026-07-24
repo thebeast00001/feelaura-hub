@@ -10,6 +10,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/layout/CartDrawer";
 import NowBar from "@/components/layout/NowBar";
+import AuthState from "@/components/layout/AuthState";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -42,6 +43,7 @@ export default function RootLayout({
           <Footer />
           <CartDrawer />
           <NowBar />
+          <AuthState />
         </SmoothScroll>
       </body>
     </html>

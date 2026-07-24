@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRef } from "react";
 import {
   motion,
@@ -23,6 +24,7 @@ const CARDS = [
     hue: 15,
     label: "Mugs",
     href: "/shop/mugs",
+    image: "/images/products/heart-handle-photo-mug.jpeg",
     rotate: -10,
     depth: 0.7,
     position: "-translate-x-[102%] -translate-y-[54%] md:-translate-x-[115%]",
@@ -32,6 +34,7 @@ const CARDS = [
     hue: 45,
     label: "Hampers",
     href: "/shop/hampers",
+    image: "/images/products/birthday-surprise-hamper.jpeg",
     rotate: 3,
     depth: 1.2,
     position: "-translate-x-1/2 -translate-y-[58%]",
@@ -41,6 +44,7 @@ const CARDS = [
     hue: 280,
     label: "Photo Frames",
     href: "/shop/photo-frames",
+    image: "/images/products/photo-collage-frame.jpeg",
     rotate: 14,
     depth: 1.8,
     position: "translate-x-[2%] -translate-y-[50%] md:translate-x-[15%]",
@@ -80,21 +84,18 @@ function FanCard({
               whileTap={{ scale: 0.97 }}
               transition={{ type: "spring", stiffness: 260, damping: 20 }}
               className="relative flex h-48 w-36 flex-col justify-end overflow-hidden rounded-[1.6rem] p-3 shadow-[0_24px_60px_-24px_rgb(27_23_18/0.35)] md:h-80 md:w-60 md:rounded-[2rem] md:p-4"
-              style={{
-                background: `
-                  radial-gradient(120% 90% at 20% 10%, hsl(${card.hue} 52% 90%) 0%, transparent 60%),
-                  radial-gradient(120% 100% at 85% 90%, hsl(${(card.hue + 40) % 360} 45% 78%) 0%, transparent 55%),
-                  hsl(${card.hue} 40% 84%)`,
-              }}
+              style={{ background: `hsl(${card.hue} 40% 84%)` }}
             >
-              <span
-                aria-hidden
-                className="text-display pointer-events-none absolute right-2 top-0 text-[5rem] leading-none md:text-[8rem]"
-                style={{ color: `hsl(${card.hue} 45% 40% / 0.22)` }}
-              >
-                {card.label.charAt(0)}
-              </span>
-              <span className="flex items-center justify-between rounded-full bg-cream/80 py-2 pl-4 pr-2 text-xs font-semibold text-ink backdrop-blur md:text-sm">
+              <Image
+                src={card.image}
+                alt={card.label}
+                fill
+                sizes="(max-width:768px) 40vw, 240px"
+                priority={index === 1}
+                className="object-cover"
+              />
+              <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/45 to-transparent" />
+              <span className="relative flex items-center justify-between rounded-full bg-cream/85 py-2 pl-4 pr-2 text-xs font-semibold text-ink backdrop-blur md:text-sm">
                 {card.label}
                 <span className="grid size-6 place-items-center rounded-full bg-ink text-[0.65rem] text-cream transition-transform duration-300 group-hover:translate-x-0.5 md:size-7">
                   →
