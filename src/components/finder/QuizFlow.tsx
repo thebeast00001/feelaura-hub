@@ -21,11 +21,11 @@ const BUDGETS: Option[] = [
 ];
 
 const VIBES: Option[] = [
-  { value: "flowers", label: "Fresh & blooming", sub: "Flowers", hue: 340 },
-  { value: "cakes", label: "Sweet tooth", sub: "Cakes", hue: 25 },
-  { value: "personalized", label: "Keep it forever", sub: "Personalized", hue: 265 },
-  { value: "soft-toys", label: "Cozy & cute", sub: "Soft toys", hue: 200 },
+  { value: "mugs", label: "Sip on a memory", sub: "Mugs", hue: 15 },
+  { value: "photo-frames", label: "Keep it forever", sub: "Photo Frames", hue: 280 },
+  { value: "led-lamps", label: "Warm & glowing", sub: "LED Lamps", hue: 260 },
   { value: "hampers", label: "Big & lavish", sub: "Hampers", hue: 45 },
+  { value: "tote-bags", label: "Everyday carry", sub: "Tote Bags", hue: 140 },
   { value: "", label: "Surprise me", sub: "A bit of everything", hue: 150 },
 ];
 

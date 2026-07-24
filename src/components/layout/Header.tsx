@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import AuthControls from "./AuthControls";
 import ThemeToggle from "./ThemeToggle";
 import FlyToCart from "./FlyToCart";
+import Logo from "@/components/ui/Logo";
 
 const NAV = [
   { href: "/shop", label: "Shop All" },
@@ -22,11 +23,11 @@ const NAV = [
 ];
 
 const TRENDING = [
-  { label: "Birthday", href: "/shop?occasion=birthday" },
+  { label: "Magic Mug", href: "/shop/mugs" },
   { label: "Hampers", href: "/shop/hampers" },
-  { label: "Chocolates", href: "/shop/chocolates" },
-  { label: "Flowers", href: "/shop/flowers" },
-  { label: "Anniversary", href: "/shop?occasion=anniversary" },
+  { label: "Photo Frames", href: "/shop/photo-frames" },
+  { label: "LED Lamps", href: "/shop/led-lamps" },
+  { label: "Birthday", href: "/shop?occasion=birthday" },
 ];
 
 const SEARCH_KEY = "feelaura-searches";
@@ -112,7 +113,7 @@ export default function Header() {
             className={cn(
               "flex h-14 items-center justify-between gap-3 rounded-full border pl-5 pr-2 transition-all duration-500 md:h-16 md:pl-6 md:pr-2.5",
               scrolled || menuOpen || searchOpen
-                ? "border-line bg-cream/85 shadow-[0_16px_40px_-20px_rgb(27_23_18/0.35)] backdrop-blur-xl"
+                ? "border-line bg-cream/90 shadow-[0_10px_30px_-22px_rgb(27_23_18/0.3)] backdrop-blur-md"
                 : "border-line/60 bg-cream/60 backdrop-blur-md"
             )}
           >
@@ -175,10 +176,12 @@ export default function Header() {
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                   className="flex w-full items-center justify-between gap-3"
                 >
-            {/* Wordmark */}
-            <Link href="/" className="text-display shrink-0 text-lg font-semibold tracking-tight sm:text-xl md:text-2xl">
-              {BRAND.name}
-              <span className="text-accent">.</span>
+            {/* Brand logo */}
+            <Link href="/" aria-label={BRAND.name} className="flex shrink-0 items-center gap-2">
+              <Logo variant="mark" priority className="!h-7 !w-7 md:!h-9 md:!w-9" />
+              <span className="text-display text-base font-semibold tracking-tight text-accent sm:text-lg md:text-xl">
+                Feelaura&nbsp;Hub
+              </span>
             </Link>
 
             {/* Desktop nav — pill links with sliding active pill */}

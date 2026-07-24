@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { OCCASIONS } from "@/lib/products";
+import { OCCASIONS, getOccasionLead } from "@/lib/products";
 import Reveal from "@/components/ui/Reveal";
+import ProductImage from "@/components/ui/ProductImage";
 
 export const metadata: Metadata = {
   title: "Shop by Occasion",
@@ -24,37 +25,30 @@ export default function OccasionsPage() {
       </Reveal>
 
       <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-        {OCCASIONS.map((o, i) => (
-          <Reveal key={o.slug} delay={(i % 4) * 0.06}>
-            <Link
-              href={`/shop?occasion=${o.slug}`}
-              className="card-lift press group relative block overflow-hidden rounded-[1.5rem]"
-            >
-              <div
-                className="relative flex aspect-square flex-col justify-end p-5"
-                style={{
-                  background: `
-                    radial-gradient(130% 90% at 20% 12%, hsl(${o.hue} 52% 89%) 0%, transparent 65%),
-                    hsl(${o.hue} 42% 81%)`,
-                }}
+        {OCCASIONS.map((o, i) => {
+          const lead = getOccasionLead(o.slug);
+          return (
+            <Reveal key={o.slug} delay={(i % 4) * 0.06}>
+              <Link
+                href={`/shop?occasion=${o.slug}`}
+                className="card-lift press group relative block aspect-square overflow-hidden rounded-[1.5rem]"
               >
-                <span
-                  aria-hidden
-                  className="text-display absolute right-3 top-1 text-7xl transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-2 group-hover:rotate-6 md:text-8xl"
-                  style={{ color: `hsl(${o.hue} 45% 38% / 0.22)` }}
-                >
-                  {o.name.charAt(0)}
-                </span>
-                <p className="text-display text-xl font-semibold md:text-2xl" style={{ color: `hsl(${o.hue} 50% 22%)` }}>
-                  {o.name}
-                </p>
-                <p className="mt-1 text-xs" style={{ color: `hsl(${o.hue} 32% 34%)` }}>
-                  {o.tagline}
-                </p>
-              </div>
-            </Link>
-          </Reveal>
-        ))}
+                <ProductImage
+                  name={o.name}
+                  hue={o.hue}
+                  image={lead?.image ?? null}
+                  sizes="(max-width:768px) 50vw, 25vw"
+                  className="absolute inset-0 size-full"
+                />
+                <div aria-hidden className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-4">
+                  <p className="text-display text-lg font-semibold text-white md:text-xl">{o.name}</p>
+                  <p className="mt-0.5 text-[0.7rem] text-white/75">{o.tagline}</p>
+                </div>
+              </Link>
+            </Reveal>
+          );
+        })}
       </div>
 
       {/* Gift finder CTA */}

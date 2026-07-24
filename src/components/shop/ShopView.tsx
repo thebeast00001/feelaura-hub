@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { CATEGORIES, getOccasion, queryProducts } from "@/lib/products";
+import Image from "next/image";
+import { CATEGORIES, getCategoryLead, getOccasion, queryProducts } from "@/lib/products";
 import type { ProductQuery, ProductTag, SortKey } from "@/lib/types";
 import { cn, formatPrice } from "@/lib/utils";
 import ProductCard from "@/components/ui/ProductCard";
@@ -77,7 +78,17 @@ export default function ShopView({
   const base = category ? `/shop/${category}` : "/shop";
 
   return (
-    <div className="container-x pb-24 pt-28 md:pt-36">
+    <div
+      className="transition-[background] duration-500"
+      style={
+        cat
+          ? {
+              background: `linear-gradient(180deg, hsl(${cat.hue} 74% 82%) 0%, hsl(${cat.hue} 62% 90%) 24%, hsl(${cat.hue} 45% 96%) 40%, var(--color-cream) 56%)`,
+            }
+          : undefined
+      }
+    >
+      <div className="container-x pb-24 pt-28 md:pt-36">
       {/* Heading */}
       <Reveal>
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
@@ -95,34 +106,76 @@ export default function ShopView({
         )}
       </Reveal>
 
-      {/* Category pill bar — static (scrolls with the page), horizontally scrollable */}
+      {/* Category chip bar — thumbnail chips that fill with the category colour */}
       <div className="-mx-5 mt-8 px-5 sm:-mx-8 sm:px-8 lg:mx-0 lg:mt-10 lg:p-0">
-        <div className="no-scrollbar flex gap-2 overflow-x-auto lg:flex-wrap">
+        <div className="no-scrollbar flex gap-2.5 overflow-x-auto pb-1 lg:flex-wrap">
+          {/* All */}
           <Link
             href={buildHref("/shop", params, { page: undefined })}
             className={cn(
-              "shrink-0 whitespace-nowrap rounded-full border px-4 py-2.5 text-sm font-medium transition-colors",
+              "group flex shrink-0 items-center gap-2 rounded-full border py-1.5 pl-1.5 pr-4 text-sm font-semibold transition-colors duration-300",
               !category
-                ? "border-ink bg-ink text-cream"
+                ? "border-transparent bg-ink text-cream"
                 : "border-line bg-surface text-ink-soft hover:border-ink-faint hover:text-ink"
             )}
           >
+            <span
+              aria-hidden
+              className="grid size-7 place-items-center rounded-full text-cream"
+              style={{
+                background:
+                  "conic-gradient(from 210deg,#c42126,#c9552e,#caa23a,#3f7a52,#4a2560,#c42126)",
+              }}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </span>
             All
           </Link>
-          {CATEGORIES.map((c) => (
-            <Link
-              key={c.slug}
-              href={buildHref(`/shop/${c.slug}`, params, { page: undefined })}
-              className={cn(
-                "shrink-0 whitespace-nowrap rounded-full border px-4 py-2.5 text-sm font-medium transition-colors",
-                category === c.slug
-                  ? "border-ink bg-ink text-cream"
-                  : "border-line bg-surface text-ink-soft hover:border-ink-faint hover:text-ink"
-              )}
-            >
-              {c.name}
-            </Link>
-          ))}
+
+          {CATEGORIES.map((c) => {
+            const active = category === c.slug;
+            const lead = getCategoryLead(c.slug);
+            return (
+              <Link
+                key={c.slug}
+                href={buildHref(`/shop/${c.slug}`, params, { page: undefined })}
+                style={
+                  active
+                    ? {
+                        background: `linear-gradient(135deg, hsl(${c.hue} 62% 46%), hsl(${c.hue} 68% 34%))`,
+                      }
+                    : undefined
+                }
+                className={cn(
+                  "group flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border py-1.5 pl-1.5 pr-4 text-sm font-semibold transition-colors duration-300",
+                  active
+                    ? "border-transparent text-white"
+                    : "border-line bg-surface text-ink-soft hover:border-ink-faint hover:text-ink"
+                )}
+              >
+                <span
+                  aria-hidden
+                  className={cn(
+                    "relative size-7 shrink-0 overflow-hidden rounded-full ring-2 transition-all",
+                    active ? "ring-white/60" : "ring-transparent group-hover:ring-2"
+                  )}
+                  style={{ background: `hsl(${c.hue} 45% 86%)`, ...(active ? {} : {}) }}
+                >
+                  {lead?.image ? (
+                    <Image src={lead.image} alt="" fill sizes="28px" className="object-cover" />
+                  ) : (
+                    <span
+                      className="absolute inset-0"
+                      style={{ background: `hsl(${c.hue} 55% 60%)` }}
+                    />
+                  )}
+                </span>
+                {c.name}
+              </Link>
+            );
+          })}
         </div>
       </div>
 
@@ -210,6 +263,7 @@ export default function ShopView({
           ))}
         </nav>
       )}
+      </div>
     </div>
   );
 }

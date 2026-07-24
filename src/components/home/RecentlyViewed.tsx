@@ -18,7 +18,6 @@ export default function RecentlyViewed() {
   return (
     <section className="container-x pb-24 md:pb-32">
       <Reveal>
-        <span className="chip mb-4">Welcome back</span>
         <h2 className="text-display mb-8 text-3xl font-semibold md:text-4xl">
           Pick up where you left off
         </h2>

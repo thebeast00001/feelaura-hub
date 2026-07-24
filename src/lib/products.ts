@@ -21,7 +21,8 @@ export interface ProductPage {
 export function queryProducts(q: ProductQuery = {}): ProductPage {
   const { category, occasion, search, sort = "featured", minPrice, maxPrice, tag, page = 1, perPage = 12 } = q;
 
-  let items = getAllProducts();
+  // Only ever surface products that have real photography — no placeholder cards.
+  let items = getAllProducts().filter((p) => p.image);
 
   if (category) items = items.filter((p) => p.category === category);
   if (occasion) items = items.filter((p) => p.occasions.includes(occasion));
@@ -60,16 +61,33 @@ export function getRelated(product: Product, count = 4): Product[] {
     .slice(0, count);
 }
 
+/** Products with real photography lead; gradient placeholders fill the rest. */
+function photosFirst(items: Product[]): Product[] {
+  return [...items].sort((a, b) => Number(!!b.image) - Number(!!a.image));
+}
+
 export function getFeatured(count = 8): Product[] {
-  return queryProducts({ tag: "bestseller", perPage: count }).items;
+  return photosFirst(queryProducts({ tag: "bestseller", perPage: 40 }).items).slice(0, count);
 }
 
 export function getNewArrivals(count = 4): Product[] {
-  return queryProducts({ tag: "new", sort: "newest", perPage: count }).items;
+  return photosFirst(queryProducts({ tag: "new", sort: "newest", perPage: 40 }).items).slice(0, count);
 }
 
 function toSnapshot(p: Product): ProductSnapshot {
   return { id: p.id, slug: p.slug, name: p.name, price: p.price, hue: p.hue, image: p.image };
+}
+
+/** Representative photographed product for a category card. */
+export function getCategoryLead(slug: string): Product | undefined {
+  const inCat = getAllProducts().filter((p) => p.category === slug);
+  return inCat.find((p) => p.image) ?? inCat[0];
+}
+
+/** Representative photographed product for an occasion card. */
+export function getOccasionLead(slug: string): Product | undefined {
+  const inOcc = getAllProducts().filter((p) => p.occasions.includes(slug));
+  return inOcc.find((p) => p.image) ?? inOcc[0];
 }
 
 /**

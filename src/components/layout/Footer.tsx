@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import { CATEGORIES } from "@/lib/products";
 import NewsletterForm from "./NewsletterForm";
+import Logo from "@/components/ui/Logo";
 
 const SOCIALS = [
   {
@@ -52,7 +53,6 @@ export default function Footer() {
           />
           <div className="relative grid items-center gap-8 md:grid-cols-2 md:gap-14">
             <div>
-              <span className="chip mb-4 !bg-cream/10 !text-gold">Stay in the loop</span>
               <h2 className="text-display text-3xl font-semibold text-cream md:text-5xl">
                 Never miss a<span className="italic text-gold"> moment</span> worth gifting.
               </h2>
@@ -65,11 +65,8 @@ export default function Footer() {
       {/* Link grid */}
       <div className="container-x grid grid-cols-2 gap-x-6 gap-y-12 py-14 md:grid-cols-[2fr_1fr_1fr_1.2fr] md:py-20">
         <div className="col-span-2 md:col-span-1">
-          <p className="text-display text-3xl font-semibold">
-            {BRAND.name}
-            <span className="text-accent">.</span>
-          </p>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-ink-soft">{BRAND.description}</p>
+          <Logo variant="full" className="h-20 w-auto" />
+          <p className="mt-5 max-w-sm text-sm leading-relaxed text-ink-soft">{BRAND.description}</p>
           <div className="mt-6 flex gap-2">
             {SOCIALS.map((s) => (
               <a

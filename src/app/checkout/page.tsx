@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCart, cartTotal, cartSavings } from "@/lib/cart-store";
+import { useOrders } from "@/lib/orders-store";
 import { useMounted } from "@/lib/use-mounted";
 import { checkDelivery, getDeliveryDates, isValidPincode } from "@/lib/delivery";
 import { formatPrice, cn } from "@/lib/utils";
@@ -48,6 +49,7 @@ export default function CheckoutPage() {
   const mounted = useMounted();
   const router = useRouter();
   const { items, clear } = useCart();
+  const placeOrder = useOrders((s) => s.place);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [pin, setPin] = useState("");
@@ -120,11 +122,12 @@ export default function CheckoutPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Checkout failed");
 
+      const orderRef = data.orderRef ?? "FA-DEMO";
       try {
         sessionStorage.setItem(
           "feelaura-last-order",
           JSON.stringify({
-            ref: data.orderRef ?? "FA-DEMO",
+            ref: orderRef,
             itemCount,
             total: grandTotal,
             deliveryDate: selectedDate,
@@ -136,6 +139,16 @@ export default function CheckoutPage() {
       } catch {
         /* private mode */
       }
+
+      // Start the live delivery tracker in the Now Bar.
+      placeOrder({
+        ref: orderRef,
+        placedAt: Date.now(),
+        deliveryDate: selectedDate,
+        itemCount,
+        total: grandTotal,
+        region: pinInfo?.region ?? "",
+      });
 
       if (data.url) {
         window.location.href = data.url;

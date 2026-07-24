@@ -4,7 +4,7 @@
  * client's real brand assets arrive.
  */
 export const BRAND = {
-  name: "feelaura-hub",
+  name: "Feelaura Hub",
   tagline: "The art of giving, perfected.",
   description:
     "Curated gifts, flowers, cakes and keepsakes — delivered with love. Find something unforgettable for every occasion.",

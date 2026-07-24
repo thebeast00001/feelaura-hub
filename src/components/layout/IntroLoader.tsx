@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { BRAND } from "@/lib/brand";
+import Logo from "@/components/ui/Logo";
 
 /**
  * First-visit intro: wordmark + progress bar, then a curtain lift.
@@ -46,10 +46,7 @@ export default function IntroLoader() {
       onAnimationComplete={() => phase === "exit" && setPhase("done")}
       className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-7 rounded-b-[3rem] bg-cream"
     >
-      <p className="text-display text-3xl font-semibold tracking-tight md:text-5xl">
-        {BRAND.name}
-        <span className="intro-dot text-accent">.</span>
-      </p>
+      <Logo variant="full" priority className="h-28 w-auto md:h-36" />
       <div className="h-[3px] w-44 overflow-hidden rounded-full bg-cream-soft md:w-56">
         <div className="intro-bar h-full rounded-full bg-accent" />
       </div>

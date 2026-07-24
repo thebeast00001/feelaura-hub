@@ -9,6 +9,7 @@ import IntroLoader from "@/components/layout/IntroLoader";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/layout/CartDrawer";
+import NowBar from "@/components/layout/NowBar";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f6f3ed",
+  themeColor: "#fcf5e3",
   viewportFit: "cover",
 };
 
@@ -50,6 +51,7 @@ export default function RootLayout({
           <main className="min-h-screen">{children}</main>
           <Footer />
           <CartDrawer />
+          <NowBar />
         </SmoothScroll>
       </body>
     </html>

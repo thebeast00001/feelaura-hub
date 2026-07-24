@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useDragControls } from "motion/react";
 import { useCart, cartTotal, cartSavings } from "@/lib/cart-store";
 import { useMediaQuery } from "@/lib/use-media";
 import { formatPrice } from "@/lib/utils";
@@ -16,6 +16,7 @@ export default function CartDrawer() {
   const total = cartTotal(items);
   const isDesktop = useMediaQuery("(min-width: 640px)");
   const progress = Math.min(1, total / FREE_DELIVERY_AT);
+  const dragControls = useDragControls();
 
   // Lock page scroll while the cart is open; Escape closes it.
   useEffect(() => {
@@ -53,16 +54,21 @@ export default function CartDrawer() {
             exit={isDesktop ? { x: "100%" } : { y: "100%" }}
             transition={{ type: "spring", stiffness: 340, damping: 36 }}
             drag={isDesktop ? false : "y"}
+            dragControls={dragControls}
+            dragListener={false}
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={{ top: 0, bottom: 0.5 }}
             onDragEnd={(_, info) => {
               if (info.offset.y > 90 || info.velocity.y > 500) close();
             }}
-            className="fixed z-[70] flex flex-col bg-cream shadow-2xl max-sm:inset-x-0 max-sm:bottom-0 max-sm:max-h-[86svh] max-sm:rounded-t-[1.8rem] sm:inset-y-0 sm:right-0 sm:w-full sm:max-w-md sm:rounded-l-[2rem]"
+            className="fixed z-[70] flex flex-col bg-cream shadow-2xl max-sm:inset-x-0 max-sm:bottom-0 max-sm:max-h-[88svh] max-sm:rounded-t-[1.8rem] sm:inset-y-0 sm:right-0 sm:w-full sm:max-w-md sm:rounded-l-[2rem]"
           >
-            {/* Grab handle (mobile bottom sheet) */}
-            <div className="grid place-items-center pb-1 pt-3 sm:hidden" aria-hidden>
-              <div className="h-1 w-10 rounded-full bg-line" />
+            {/* Grab handle — the only draggable area, so the item list scrolls freely */}
+            <div
+              className="grid shrink-0 cursor-grab touch-none place-items-center pb-1.5 pt-3 active:cursor-grabbing sm:hidden"
+              onPointerDown={(e) => !isDesktop && dragControls.start(e)}
+            >
+              <div className="h-1.5 w-11 rounded-full bg-line" />
             </div>
 
             <div className="flex items-center justify-between border-b border-line px-6 py-4 sm:py-5">
@@ -139,7 +145,7 @@ export default function CartDrawer() {
                   </div>
                 </div>
 
-                <ul className="flex-1 divide-y divide-line overflow-y-auto overscroll-contain px-6">
+                <ul className="min-h-0 flex-1 divide-y divide-line overflow-y-auto overscroll-contain px-6">
                   <AnimatePresence initial={false}>
                     {items.map((item) => (
                       <motion.li
@@ -206,10 +212,8 @@ export default function CartDrawer() {
                   </AnimatePresence>
                 </ul>
 
-                {/* Suggestions crowd the bottom sheet on phones — desktop drawer only */}
-                <div className="max-sm:hidden">
-                  <Suggestions />
-                </div>
+                {/* Complete the gift — compact horizontal row, shown on all sizes */}
+                <Suggestions />
 
                 <div className="border-t border-line px-6 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-5">
                   {cartSavings(items) > 0 && (

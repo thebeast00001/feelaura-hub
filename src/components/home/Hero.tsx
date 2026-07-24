@@ -20,9 +20,9 @@ import {
 
 const CARDS = [
   {
-    hue: 340,
-    label: "Flowers",
-    href: "/shop/flowers",
+    hue: 15,
+    label: "Mugs",
+    href: "/shop/mugs",
     rotate: -10,
     depth: 0.7,
     position: "-translate-x-[102%] -translate-y-[54%] md:-translate-x-[115%]",
@@ -38,9 +38,9 @@ const CARDS = [
     z: "z-30",
   },
   {
-    hue: 265,
-    label: "Personalized",
-    href: "/shop/personalized",
+    hue: 280,
+    label: "Photo Frames",
+    href: "/shop/photo-frames",
     rotate: 14,
     depth: 1.8,
     position: "translate-x-[2%] -translate-y-[50%] md:translate-x-[15%]",
@@ -242,25 +242,6 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll cue */}
-      {!reduce && (
-        <motion.div
-          style={{ opacity }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.6, duration: 1 }}
-          className="absolute bottom-5 left-1/2 hidden -translate-x-1/2 md:block"
-          aria-hidden
-        >
-          <div className="flex h-9 w-[1.35rem] justify-center rounded-full border border-ink-faint/40 pt-1.5">
-            <motion.span
-              animate={{ y: [0, 11, 0], opacity: [1, 0.15, 1] }}
-              transition={{ duration: 1.9, repeat: Infinity, ease: "easeInOut" }}
-              className="size-1.5 rounded-full bg-accent"
-            />
-          </div>
-        </motion.div>
-      )}
     </section>
   );
 }
