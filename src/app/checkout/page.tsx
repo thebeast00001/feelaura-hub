@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCart, cartTotal, cartSavings } from "@/lib/cart-store";
 import { useOrders } from "@/lib/orders-store";
+import { useNowBar } from "@/lib/nowbar-store";
 import { useMounted } from "@/lib/use-mounted";
 import { checkDelivery, getDeliveryDates, isValidPincode } from "@/lib/delivery";
 import { formatPrice, cn } from "@/lib/utils";
@@ -140,7 +141,8 @@ export default function CheckoutPage() {
         /* private mode */
       }
 
-      // Start the live delivery tracker in the Now Bar.
+      // Start the live delivery tracker in the Now Bar (and re-reveal it if
+      // the customer had previously minimised it).
       placeOrder({
         ref: orderRef,
         placedAt: Date.now(),
@@ -148,7 +150,9 @@ export default function CheckoutPage() {
         itemCount,
         total: grandTotal,
         region: pinInfo?.region ?? "",
+        items: [...items],
       });
+      useNowBar.getState().show();
 
       if (data.url) {
         window.location.href = data.url;

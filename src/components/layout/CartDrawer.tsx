@@ -61,7 +61,7 @@ export default function CartDrawer() {
             onDragEnd={(_, info) => {
               if (info.offset.y > 90 || info.velocity.y > 500) close();
             }}
-            className="fixed z-[70] flex flex-col bg-cream shadow-2xl max-sm:inset-x-0 max-sm:bottom-0 max-sm:max-h-[88svh] max-sm:rounded-t-[1.8rem] sm:inset-y-0 sm:right-0 sm:w-full sm:max-w-md sm:rounded-l-[2rem]"
+            className="fixed z-[70] flex flex-col overflow-hidden bg-cream shadow-2xl max-sm:inset-x-0 max-sm:bottom-0 max-sm:max-h-[88svh] max-sm:rounded-t-[1.8rem] sm:inset-y-0 sm:right-0 sm:w-full sm:max-w-md sm:rounded-l-[2rem]"
           >
             {/* Grab handle — the only draggable area, so the item list scrolls freely */}
             <div
@@ -71,7 +71,7 @@ export default function CartDrawer() {
               <div className="h-1.5 w-11 rounded-full bg-line" />
             </div>
 
-            <div className="flex items-center justify-between border-b border-line px-6 py-4 sm:py-5">
+            <div className="flex shrink-0 items-center justify-between border-b border-line px-6 py-4 sm:py-5">
               <p className="text-display text-xl font-semibold">
                 Your Cart
                 {items.length > 0 && (
@@ -121,7 +121,7 @@ export default function CartDrawer() {
             ) : (
               <>
                 {/* Free delivery progress */}
-                <div className="border-b border-line px-6 py-4">
+                <div className="shrink-0 border-b border-line px-6 py-4">
                   <p className="text-xs font-medium text-ink-soft">
                     {total >= FREE_DELIVERY_AT ? (
                       <span className="text-sage">Free delivery unlocked</span>
@@ -213,9 +213,11 @@ export default function CartDrawer() {
                 </ul>
 
                 {/* Complete the gift — compact horizontal row, shown on all sizes */}
-                <Suggestions />
+                <div className="shrink-0">
+                  <Suggestions />
+                </div>
 
-                <div className="border-t border-line px-6 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-5">
+                <div className="shrink-0 border-t border-line px-6 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-5">
                   {cartSavings(items) > 0 && (
                     <p className="mb-2 text-right text-xs font-semibold text-sage">
                       You&apos;re saving {formatPrice(cartSavings(items))}

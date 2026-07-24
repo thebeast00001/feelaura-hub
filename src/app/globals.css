@@ -31,20 +31,6 @@
 }
 
 /* ---------------------------------------------------------------------------
-   DARK MODE — flips the whole site via tokens. Toggled by data-theme on <html>.
---------------------------------------------------------------------------- */
-html[data-theme="dark"] {
-  --color-cream: #15120e;
-  --color-cream-soft: #1e1a14;
-  --color-surface: #241f18;
-  --color-ink: #f1ece2;
-  --color-ink-soft: #b9b0a0;
-  --color-ink-faint: #837b6c;
-  --color-line: #332c23;
-  color-scheme: dark;
-}
-
-/* ---------------------------------------------------------------------------
    BASE
 --------------------------------------------------------------------------- */
 html {

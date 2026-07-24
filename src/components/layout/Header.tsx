@@ -10,7 +10,6 @@ import { useWishlist } from "@/lib/wishlist-store";
 import { useMounted } from "@/lib/use-mounted";
 import { cn } from "@/lib/utils";
 import AuthControls from "./AuthControls";
-import ThemeToggle from "./ThemeToggle";
 import FlyToCart from "./FlyToCart";
 import Logo from "@/components/ui/Logo";
 
@@ -211,11 +210,8 @@ export default function Header() {
               })}
             </nav>
 
-            {/* Actions — theme toggle moves into the menu sheet on small screens */}
+            {/* Actions */}
             <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
-              <div className="max-sm:hidden">
-                <ThemeToggle />
-              </div>
               <AuthControls />
               <button
                 aria-label="Search"
@@ -404,12 +400,6 @@ export default function Header() {
                   </motion.div>
                 ))}
               </nav>
-
-              {/* Theme control (small screens only — lives in the pill on larger) */}
-              <div className="mt-1 flex items-center justify-between border-t border-line px-5 py-2.5 sm:hidden">
-                <span className="text-sm font-medium text-ink-soft">Appearance</span>
-                <ThemeToggle />
-              </div>
             </motion.div>
           </>
         )}

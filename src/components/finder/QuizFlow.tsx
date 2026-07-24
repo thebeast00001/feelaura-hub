@@ -1,9 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import type { Occasion } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 interface Option {
@@ -11,13 +11,22 @@ interface Option {
   label: string;
   sub?: string;
   hue?: number;
+  image?: string | null;
+}
+
+interface OccasionInput {
+  slug: string;
+  name: string;
+  tagline: string;
+  hue: number;
+  image: string | null;
 }
 
 const BUDGETS: Option[] = [
-  { value: "under-500", label: "Under ₹500", sub: "Small but mighty" },
-  { value: "500-1500", label: "₹500 – ₹1,500", sub: "The sweet spot" },
-  { value: "over-1500", label: "₹1,500+", sub: "Go all out" },
-  { value: "", label: "Any budget", sub: "Show me everything" },
+  { value: "under-500", label: "Under ₹500", sub: "Small but mighty", hue: 40 },
+  { value: "500-1500", label: "₹500 – ₹1,500", sub: "The sweet spot", hue: 150 },
+  { value: "over-1500", label: "₹1,500+", sub: "Go all out", hue: 285 },
+  { value: "", label: "Any budget", sub: "Show me everything", hue: 15 },
 ];
 
 const VIBES: Option[] = [
@@ -26,10 +35,10 @@ const VIBES: Option[] = [
   { value: "led-lamps", label: "Warm & glowing", sub: "LED Lamps", hue: 260 },
   { value: "hampers", label: "Big & lavish", sub: "Hampers", hue: 45 },
   { value: "tote-bags", label: "Everyday carry", sub: "Tote Bags", hue: 140 },
-  { value: "", label: "Surprise me", sub: "A bit of everything", hue: 150 },
+  { value: "", label: "Surprise me", sub: "A bit of everything", hue: 200 },
 ];
 
-export default function QuizFlow({ occasions }: { occasions: Occasion[] }) {
+export default function QuizFlow({ occasions }: { occasions: OccasionInput[] }) {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [occasion, setOccasion] = useState<string | null>(null);
@@ -41,12 +50,13 @@ export default function QuizFlow({ occasions }: { occasions: Occasion[] }) {
     label: o.name,
     sub: o.tagline,
     hue: o.hue,
+    image: o.image,
   }));
 
   const steps = [
-    { question: "What's the occasion?", options: occasionOptions },
-    { question: "What's the budget?", options: BUDGETS },
-    { question: "What's their vibe?", options: VIBES },
+    { question: "Who's it for, and why?", hint: "The occasion", options: occasionOptions },
+    { question: "What's the budget?", hint: "Your spend", options: BUDGETS },
+    { question: "What's their vibe?", hint: "The style", options: VIBES },
   ];
 
   function choose(value: string) {
@@ -66,62 +76,70 @@ export default function QuizFlow({ occasions }: { occasions: Occasion[] }) {
     }
   }
 
+  const s = steps[step];
+
   return (
-    <div className="mx-auto w-full max-w-2xl">
+    <div className="mx-auto w-full max-w-3xl">
       {/* Progress */}
-      <div className="mb-10 flex items-center gap-2">
+      <div className="mb-8 flex items-center gap-2">
         {steps.map((_, i) => (
-          <motion.div
-            key={i}
-            className="h-1.5 flex-1 overflow-hidden rounded-full bg-cream-soft"
-          >
+          <div key={i} className="h-1.5 flex-1 overflow-hidden rounded-full bg-cream-soft">
             <motion.div
               animate={{ width: i <= step ? "100%" : "0%" }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="h-full rounded-full bg-accent"
             />
-          </motion.div>
+          </div>
         ))}
       </div>
 
       <AnimatePresence mode="wait">
         <motion.div
           key={step}
-          initial={{ opacity: 0, x: 40 }}
+          initial={{ opacity: 0, x: 36 }}
           animate={{ opacity: leaving ? 0.5 : 1, x: 0 }}
-          exit={{ opacity: 0, x: -40 }}
+          exit={{ opacity: 0, x: -36 }}
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         >
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
-            Step {step + 1} of 3
+            Step {step + 1} of 3 · {s.hint}
           </p>
-          <h2 className="text-display mt-3 text-4xl font-semibold md:text-5xl">
-            {steps[step].question}
-          </h2>
+          <h2 className="text-display mt-3 text-3xl font-semibold md:text-5xl">{s.question}</h2>
 
-          <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3">
-            {steps[step].options.map((opt, i) => (
+          <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
+            {s.options.map((opt, i) => (
               <motion.button
                 key={`${step}-${opt.value}-${opt.label}`}
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 * i + 0.15, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                whileTap={{ scale: 0.96 }}
+                transition={{ delay: 0.04 * i + 0.12, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                whileTap={{ scale: 0.97 }}
                 onClick={() => choose(opt.value)}
-                className={cn(
-                  "group rounded-[1.4rem] border border-line bg-surface p-4 text-left transition-all duration-300",
-                  "hover:-translate-y-1 hover:border-ink hover:shadow-[0_16px_32px_-16px_rgb(27_23_18/0.25)]"
-                )}
+                className="group flex flex-col overflow-hidden rounded-[1.4rem] border border-line bg-surface text-left transition-all duration-300 hover:-translate-y-1 hover:border-ink"
               >
-                {opt.hue !== undefined && (
-                  <span
-                    aria-hidden
-                    className="mb-3 block h-2 w-8 rounded-full transition-all duration-300 group-hover:w-12"
-                    style={{ background: `hsl(${opt.hue} 50% 74%)` }}
-                  />
-                )}
-                <p className="text-sm font-semibold leading-snug">{opt.label}</p>
-                {opt.sub && <p className="mt-1 text-xs text-ink-faint">{opt.sub}</p>}
+                {/* Cover: photo when available, else a colour swatch */}
+                <div className="relative aspect-[5/3] w-full overflow-hidden">
+                  {opt.image ? (
+                    <Image
+                      src={opt.image}
+                      alt=""
+                      fill
+                      sizes="(max-width:768px) 45vw, 220px"
+                      className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                    />
+                  ) : (
+                    <div
+                      className="size-full transition-transform duration-700 group-hover:scale-105"
+                      style={{
+                        background: `linear-gradient(135deg, hsl(${opt.hue ?? 20} 55% 82%), hsl(${((opt.hue ?? 20) + 34) % 360} 50% 70%))`,
+                      }}
+                    />
+                  )}
+                </div>
+                <div className="p-3.5">
+                  <p className="text-sm font-semibold leading-snug">{opt.label}</p>
+                  {opt.sub && <p className="mt-0.5 text-xs text-ink-faint">{opt.sub}</p>}
+                </div>
               </motion.button>
             ))}
           </div>

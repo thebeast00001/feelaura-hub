@@ -49,7 +49,7 @@ export default function Suggestions({ title = "Complete the gift" }: { title?: s
         <p className="text-xs font-semibold uppercase tracking-wider text-ink-faint">{title}</p>
         <div className="no-scrollbar -mx-1 mt-3 flex gap-3 overflow-x-auto px-1 pb-1">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="w-32 shrink-0">
+            <div key={i} className="w-24 shrink-0 sm:w-28">
               <div className="skeleton aspect-square w-full rounded-2xl" />
               <div className="skeleton mt-2 h-3 w-24 rounded-full" />
               <div className="skeleton mt-1.5 h-3 w-14 rounded-full" />
@@ -73,14 +73,14 @@ export default function Suggestions({ title = "Complete the gift" }: { title?: s
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.06, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="w-32 shrink-0"
+            className="w-24 shrink-0 sm:w-28"
           >
             <div className="group relative">
               <ProductImage
                 name={s.name}
                 hue={s.hue}
                 image={s.image}
-                sizes="128px"
+                sizes="112px"
                 className="aspect-square w-full rounded-2xl"
               />
               <button

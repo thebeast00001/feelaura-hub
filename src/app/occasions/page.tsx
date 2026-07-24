@@ -1,8 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { OCCASIONS, getOccasionLead } from "@/lib/products";
+import { OCCASIONS, getProduct } from "@/lib/products";
 import Reveal from "@/components/ui/Reveal";
 import ProductImage from "@/components/ui/ProductImage";
+
+const OCCASION_HERO: Record<string, string> = {
+  birthday: "birthday-surprise-hamper",
+  anniversary: "evil-eye-gift-box",
+  "love-romance": "rotating-photo-cube-lamp",
+  congratulations: "personalised-photo-magazine",
+  "thank-you": "floral-bird-canvas-tote",
+  "new-baby": "photo-collage-frame",
+  housewarming: "metallic-duo-mug-set",
+  "just-because": "photo-keychain-set",
+};
 
 export const metadata: Metadata = {
   title: "Shop by Occasion",
@@ -26,7 +37,7 @@ export default function OccasionsPage() {
 
       <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
         {OCCASIONS.map((o, i) => {
-          const lead = getOccasionLead(o.slug);
+          const lead = getProduct(OCCASION_HERO[o.slug] ?? "");
           return (
             <Reveal key={o.slug} delay={(i % 4) * 0.06}>
               <Link

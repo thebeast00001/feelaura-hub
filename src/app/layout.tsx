@@ -31,19 +31,9 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const app = (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        {/* Set theme before first paint — light by default for new visitors;
-            dark only when the user has explicitly chosen it via the toggle */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              "(function(){try{var t=localStorage.getItem('feelaura-theme');document.documentElement.dataset.theme=t==='dark'?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}})()",
-          }}
-        />
-      </head>
-      {/* suppressHydrationWarning: browser extensions (ColorZilla etc.) inject
-          attributes into <body> before React hydrates — harmless, but noisy. */}
+    <html lang="en">
+      {/* suppressHydrationWarning: browser extensions inject attributes into
+          <body> before React hydrates — harmless, but noisy. */}
       <body suppressHydrationWarning>
         <IntroLoader />
         <SmoothScroll>

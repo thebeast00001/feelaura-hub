@@ -8,7 +8,6 @@ import ProductImage from "@/components/ui/ProductImage";
 import ProductCard from "@/components/ui/ProductCard";
 import Reveal from "@/components/ui/Reveal";
 import PurchasePanel from "@/components/product/PurchasePanel";
-import MobileBuyBar from "@/components/product/MobileBuyBar";
 import PinCheck from "@/components/product/PinCheck";
 import RecordView from "@/components/product/RecordView";
 
@@ -127,8 +126,6 @@ export default async function ProductPage({
           </Reveal>
         </div>
       </div>
-
-      <MobileBuyBar product={product} />
 
       {/* Related */}
       {related.length > 0 && (
