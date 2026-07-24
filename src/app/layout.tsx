@@ -32,11 +32,12 @@ export default function RootLayout({
   const app = (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Set theme before first paint — no flash of the wrong theme */}
+        {/* Set theme before first paint — light by default for new visitors;
+            dark only when the user has explicitly chosen it via the toggle */}
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "(function(){try{var t=localStorage.getItem('feelaura-theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t}catch(e){}})()",
+              "(function(){try{var t=localStorage.getItem('feelaura-theme');document.documentElement.dataset.theme=t==='dark'?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}})()",
           }}
         />
       </head>
