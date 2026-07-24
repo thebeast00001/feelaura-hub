@@ -162,8 +162,6 @@ export default function NowBar() {
         </button>
 
         <motion.div
-          layout
-          transition={{ type: "spring", stiffness: 420, damping: 34 }}
           drag={!expanded && activities.length > 1 ? "x" : false}
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.2}
@@ -171,10 +169,7 @@ export default function NowBar() {
             if (info.offset.x < -60) cycle(1);
             else if (info.offset.x > 60) cycle(-1);
           }}
-          className={cn(
-            "w-full overflow-hidden bg-ink text-cream shadow-[0_20px_50px_-18px_rgba(0,0,0,0.6)] transition-[border-radius] duration-200",
-            expanded ? "rounded-[1.9rem]" : "rounded-full"
-          )}
+          className="w-full overflow-hidden rounded-[2rem] bg-ink text-cream shadow-[0_20px_50px_-18px_rgba(0,0,0,0.6)]"
         >
           <AnimatePresence mode="wait" initial={false}>
             {/* ---------- PRODUCT (add to cart) ---------- */}
