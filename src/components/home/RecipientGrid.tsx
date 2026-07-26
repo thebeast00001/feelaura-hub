@@ -28,8 +28,8 @@ export default function RecipientGrid() {
       {RECIPIENTS.map((r, i) => (
         <motion.div
           key={r.name}
-          initial={reduce ? false : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={reduce ? false : { opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: "0px 0px -60px 0px" }}
           transition={{ delay: (i % 3) * 0.06, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >

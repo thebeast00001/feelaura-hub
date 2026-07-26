@@ -63,6 +63,7 @@ export default function HomePage() {
               <Reveal
                 key={cat.slug}
                 delay={(i % 4) * 0.05}
+                y={0}
                 className="max-md:w-[38%] max-md:shrink-0 max-md:snap-start"
               >
                 <Link
@@ -98,7 +99,7 @@ export default function HomePage() {
         </Reveal>
         <div className="no-scrollbar mt-8 max-md:-mx-5 max-md:-my-2 max-md:flex max-md:snap-x max-md:gap-3 max-md:overflow-x-auto max-md:px-5 max-md:py-2 md:mt-10 md:grid md:grid-cols-3 md:gap-4 lg:grid-cols-6">
           {occasionItems.map((o, i) => (
-            <Reveal key={o.slug} delay={(i % 4) * 0.05} className="max-md:w-[38%] max-md:shrink-0 max-md:snap-start">
+            <Reveal key={o.slug} delay={(i % 4) * 0.05} y={0} className="max-md:w-[38%] max-md:shrink-0 max-md:snap-start">
               <Link
                 href={`/shop?occasion=${o.slug}`}
                 className="press group relative block aspect-[4/5] overflow-hidden rounded-[1.4rem]"
@@ -144,7 +145,7 @@ export default function HomePage() {
         </Reveal>
         <div className={rowClass}>
           {featured.map((product, i) => (
-            <Reveal key={product.id} delay={(i % 4) * 0.07} className={cardClass}>
+            <Reveal key={product.id} delay={(i % 4) * 0.07} y={0} className={cardClass}>
               <ProductCard product={product} />
             </Reveal>
           ))}
@@ -164,7 +165,7 @@ export default function HomePage() {
         </Reveal>
         <div className={rowClass}>
           {hampers.map((product, i) => (
-            <Reveal key={product.id} delay={(i % 4) * 0.07} className={cardClass}>
+            <Reveal key={product.id} delay={(i % 4) * 0.07} y={0} className={cardClass}>
               <ProductCard product={product} />
             </Reveal>
           ))}
@@ -181,7 +182,7 @@ export default function HomePage() {
         </Reveal>
         <div className={rowClass}>
           {arrivals.map((product, i) => (
-            <Reveal key={product.id} delay={i * 0.07} className={cardClass}>
+            <Reveal key={product.id} delay={i * 0.07} y={0} className={cardClass}>
               <ProductCard product={product} />
             </Reveal>
           ))}
