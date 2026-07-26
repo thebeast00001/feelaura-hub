@@ -29,7 +29,7 @@ const OCCASION_HERO: Record<string, string> = {
 };
 
 const rowClass =
-  "no-scrollbar max-md:-mx-5 max-md:flex max-md:snap-x max-md:snap-mandatory max-md:gap-4 max-md:overflow-x-auto max-md:px-5 max-md:pb-2 md:grid md:grid-cols-4 md:gap-6";
+  "no-scrollbar max-md:-mx-5 max-md:-my-2 max-md:flex max-md:snap-x max-md:snap-mandatory max-md:gap-4 max-md:overflow-x-auto max-md:px-5 max-md:py-2 md:grid md:grid-cols-4 md:gap-6";
 const cardClass = "max-md:w-[70%] max-md:shrink-0 max-md:snap-start";
 
 export default function HomePage() {
@@ -56,7 +56,7 @@ export default function HomePage() {
             View all →
           </Link>
         </Reveal>
-        <div className="no-scrollbar max-md:-mx-5 max-md:flex max-md:snap-x max-md:gap-3 max-md:overflow-x-auto max-md:px-5 max-md:pb-2 md:grid md:grid-cols-4 md:gap-4">
+        <div className="no-scrollbar max-md:-mx-5 max-md:-my-2 max-md:flex max-md:snap-x max-md:gap-3 max-md:overflow-x-auto max-md:px-5 max-md:py-2 md:grid md:grid-cols-4 md:gap-4">
           {CATEGORIES.slice(0, 8).map((cat, i) => {
             const lead = getCategoryLead(cat.slug);
             return (
@@ -96,7 +96,7 @@ export default function HomePage() {
             Not sure? Try the Gift Finder →
           </Link>
         </Reveal>
-        <div className="no-scrollbar mt-8 max-md:-mx-5 max-md:flex max-md:snap-x max-md:gap-3 max-md:overflow-x-auto max-md:px-5 max-md:pb-2 md:mt-10 md:grid md:grid-cols-3 md:gap-4 lg:grid-cols-6">
+        <div className="no-scrollbar mt-8 max-md:-mx-5 max-md:-my-2 max-md:flex max-md:snap-x max-md:gap-3 max-md:overflow-x-auto max-md:px-5 max-md:py-2 md:mt-10 md:grid md:grid-cols-3 md:gap-4 lg:grid-cols-6">
           {occasionItems.map((o, i) => (
             <Reveal key={o.slug} delay={(i % 4) * 0.05} className="max-md:w-[38%] max-md:shrink-0 max-md:snap-start">
               <Link
