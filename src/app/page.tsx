@@ -1,13 +1,20 @@
 import Link from "next/link";
-import Hero from "@/components/home/Hero";
 import BannerCarousel from "@/components/home/BannerCarousel";
 import ReminderNudge from "@/components/home/ReminderNudge";
 import RecentlyViewed from "@/components/home/RecentlyViewed";
-import OccasionShowcase from "@/components/home/OccasionShowcase";
-import Marquee from "@/components/ui/Marquee";
+import RecipientGrid from "@/components/home/RecipientGrid";
 import Reveal from "@/components/ui/Reveal";
 import ProductCard from "@/components/ui/ProductCard";
-import { OCCASIONS, getProduct, getFeatured, getNewArrivals } from "@/lib/products";
+import ProductImage from "@/components/ui/ProductImage";
+import {
+  CATEGORIES,
+  OCCASIONS,
+  getProduct,
+  getCategoryLead,
+  getFeatured,
+  getNewArrivals,
+  queryProducts,
+} from "@/lib/products";
 
 /** A thematically-fitting product photo for each occasion panel. */
 const OCCASION_HERO: Record<string, string> = {
@@ -21,9 +28,14 @@ const OCCASION_HERO: Record<string, string> = {
   "just-because": "photo-keychain-set",
 };
 
+const rowClass =
+  "no-scrollbar max-md:-mx-5 max-md:flex max-md:snap-x max-md:snap-mandatory max-md:gap-4 max-md:overflow-x-auto max-md:px-5 max-md:pb-2 md:grid md:grid-cols-4 md:gap-6";
+const cardClass = "max-md:w-[70%] max-md:shrink-0 max-md:snap-start";
+
 export default function HomePage() {
   const featured = getFeatured(8);
   const arrivals = getNewArrivals(4);
+  const hampers = queryProducts({ category: "hampers", perPage: 8 }).items;
   const occasionItems = OCCASIONS.slice(0, 6).map((o) => {
     const hero = getProduct(OCCASION_HERO[o.slug] ?? "");
     return { slug: o.slug, name: o.name, tagline: o.tagline, hue: o.hue, image: hero?.image ?? null };
@@ -31,22 +43,52 @@ export default function HomePage() {
 
   return (
     <>
-      <Hero />
-
+      {/* 1 — Festive banner hero */}
       <BannerCarousel />
-
-      <Marquee
-        items={[
-          "Same-day delivery",
-          "Hand-wrapped with care",
-          "Free message card",
-          "5,000+ happy gifters",
-        ]}
-      />
 
       <ReminderNudge />
 
-      {/* Shop by occasion */}
+      {/* 2 — Shop by category */}
+      <section className="container-x pt-12 md:pt-16">
+        <Reveal className="mb-8 flex items-end justify-between gap-6">
+          <h2 className="text-display text-3xl font-semibold md:text-4xl">Shop by category</h2>
+          <Link href="/shop" className="link-underline hidden shrink-0 text-sm font-medium text-ink-soft hover:text-ink sm:block">
+            View all →
+          </Link>
+        </Reveal>
+        <div className="no-scrollbar max-md:-mx-5 max-md:flex max-md:snap-x max-md:gap-3 max-md:overflow-x-auto max-md:px-5 max-md:pb-2 md:grid md:grid-cols-4 md:gap-4">
+          {CATEGORIES.slice(0, 8).map((cat, i) => {
+            const lead = getCategoryLead(cat.slug);
+            return (
+              <Reveal
+                key={cat.slug}
+                delay={(i % 4) * 0.05}
+                className="max-md:w-[38%] max-md:shrink-0 max-md:snap-start"
+              >
+                <Link
+                  href={`/shop/${cat.slug}`}
+                  className="press group relative block aspect-[4/5] overflow-hidden rounded-[1.4rem]"
+                >
+                  <ProductImage
+                    name={cat.name}
+                    hue={cat.hue}
+                    image={lead?.image ?? null}
+                    sizes="(max-width:768px) 46vw, 30vw"
+                    className="absolute inset-0 size-full"
+                  />
+                  <div aria-hidden className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-4">
+                    <p className="text-display text-lg font-semibold text-white md:text-xl">{cat.name}</p>
+                    <p className="mt-0.5 text-[0.7rem] text-white/75">{cat.tagline}</p>
+                  </div>
+                </Link>
+              </Reveal>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 3 — Shop by occasion */}
       <section className="container-x pb-4 pt-14 md:pt-20">
         <Reveal className="flex flex-wrap items-center justify-between gap-4">
           <h2 className="text-display text-3xl font-semibold md:text-4xl">Shop by occasion</h2>
@@ -54,92 +96,102 @@ export default function HomePage() {
             Not sure? Try the Gift Finder →
           </Link>
         </Reveal>
-        <Reveal delay={0.08}>
-          <OccasionShowcase items={occasionItems} />
-        </Reveal>
-      </section>
-
-      {/* Bestsellers */}
-      <section className="py-20 md:py-28">
-        <div className="container-x">
-          <Reveal>
-            <div className="mb-10 flex items-end justify-between gap-6">
-              <div>
-                <h2 className="text-display max-w-md text-4xl font-semibold md:text-5xl">
-                  Loved by thousands
-                </h2>
-              </div>
-              <Link href="/shop?tag=bestseller" className="link-underline hidden shrink-0 text-sm font-medium text-ink-soft hover:text-ink sm:block">
-                All bestsellers →
+        <div className="no-scrollbar mt-8 max-md:-mx-5 max-md:flex max-md:snap-x max-md:gap-3 max-md:overflow-x-auto max-md:px-5 max-md:pb-2 md:mt-10 md:grid md:grid-cols-3 md:gap-4 lg:grid-cols-6">
+          {occasionItems.map((o, i) => (
+            <Reveal key={o.slug} delay={(i % 4) * 0.05} className="max-md:w-[38%] max-md:shrink-0 max-md:snap-start">
+              <Link
+                href={`/shop?occasion=${o.slug}`}
+                className="press group relative block aspect-[4/5] overflow-hidden rounded-[1.4rem]"
+              >
+                <ProductImage
+                  name={o.name}
+                  hue={o.hue}
+                  image={o.image}
+                  sizes="(max-width:768px) 46vw, 30vw"
+                  className="absolute inset-0 size-full"
+                />
+                <div aria-hidden className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-4">
+                  <p className="text-display text-lg font-semibold text-white md:text-xl">{o.name}</p>
+                  <p className="mt-0.5 text-[0.7rem] text-white/75">{o.tagline}</p>
+                </div>
               </Link>
-            </div>
-          </Reveal>
-
-          {/* Snap carousel on mobile, grid on desktop */}
-          <div className="no-scrollbar max-md:-mx-5 max-md:flex max-md:snap-x max-md:snap-mandatory max-md:gap-4 max-md:overflow-x-auto max-md:px-5 max-md:pb-2 md:grid md:grid-cols-4 md:gap-6">
-            {featured.map((product, i) => (
-              <Reveal key={product.id} delay={(i % 4) * 0.07} className="max-md:w-[70%] max-md:shrink-0 max-md:snap-start">
-                <ProductCard product={product} />
-              </Reveal>
-            ))}
-          </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 
-      {/* Editorial banner */}
-      <section className="container-x py-20 md:py-28">
-        <Reveal>
-          <div className="relative overflow-hidden rounded-[2rem] bg-ink px-6 py-20 text-center md:rounded-[2.5rem] md:py-28">
-            <div
-              aria-hidden
-              className="absolute inset-0 opacity-40"
-              style={{
-                background: `
-                  radial-gradient(60% 80% at 20% 100%, hsl(18 60% 30%) 0%, transparent 70%),
-                  radial-gradient(50% 70% at 85% 0%, hsl(340 40% 28%) 0%, transparent 70%)`,
-              }}
-            />
-            <p className="relative text-xs font-semibold uppercase tracking-[0.3em] text-gold">
-              Personalised gifting
-            </p>
-            <h2 className="text-display relative mx-auto mt-4 max-w-2xl text-4xl font-semibold text-cream md:text-6xl">
-              Their photo on it. <span className="italic text-gold">Your heart</span> in it.
-            </h2>
-            <Link
-              href="/shop/photo-frames"
-              className="relative mt-8 inline-block rounded-full bg-cream px-8 py-4 text-sm font-semibold text-ink transition-colors duration-300 hover:bg-gold"
-            >
-              Make it personal →
-            </Link>
-          </div>
+      {/* 3.5 — Gifts for… (recipient) */}
+      <section className="container-x pt-14 md:pt-20">
+        <Reveal className="mb-8">
+          <h2 className="text-display text-3xl font-semibold md:text-4xl">
+            Find the perfect gift for<span className="text-accent">…</span>
+          </h2>
+          <p className="mt-1 text-sm text-ink-soft">Shop by who you&apos;re spoiling.</p>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <RecipientGrid />
         </Reveal>
       </section>
 
-      {/* New arrivals */}
-      <section className="container-x pb-24 md:pb-32">
-        <Reveal>
-          <div className="mb-10 flex items-end justify-between gap-6">
-            <div>
-              <h2 className="text-display max-w-md text-4xl font-semibold md:text-5xl">
-                Just arrived
-              </h2>
-            </div>
-            <Link href="/shop?sort=newest" className="link-underline hidden shrink-0 text-sm font-medium text-ink-soft hover:text-ink sm:block">
-              See what&apos;s new →
-            </Link>
-          </div>
+      {/* 4 — Bestsellers */}
+      <section className="container-x pt-14 md:pt-20">
+        <Reveal className="mb-8 flex items-end justify-between gap-6">
+          <h2 className="text-display max-w-md text-3xl font-semibold md:text-4xl">Loved by thousands</h2>
+          <Link href="/shop?tag=bestseller" className="link-underline hidden shrink-0 text-sm font-medium text-ink-soft hover:text-ink sm:block">
+            All bestsellers →
+          </Link>
         </Reveal>
-
-        <div className="no-scrollbar max-md:-mx-5 max-md:flex max-md:snap-x max-md:snap-mandatory max-md:gap-4 max-md:overflow-x-auto max-md:px-5 max-md:pb-2 md:grid md:grid-cols-4 md:gap-6">
-          {arrivals.map((product, i) => (
-            <Reveal key={product.id} delay={i * 0.07} className="max-md:w-[70%] max-md:shrink-0 max-md:snap-start">
+        <div className={rowClass}>
+          {featured.map((product, i) => (
+            <Reveal key={product.id} delay={(i % 4) * 0.07} className={cardClass}>
               <ProductCard product={product} />
             </Reveal>
           ))}
         </div>
       </section>
 
-      <RecentlyViewed />
+      {/* 5 — Gift hampers */}
+      <section className="container-x pt-14 md:pt-20">
+        <Reveal className="mb-8 flex items-end justify-between gap-6">
+          <div>
+            <h2 className="text-display max-w-md text-3xl font-semibold md:text-4xl">Gift hampers</h2>
+            <p className="mt-1 text-sm text-ink-soft">Beautifully packed boxes of joy.</p>
+          </div>
+          <Link href="/shop/hampers" className="link-underline hidden shrink-0 text-sm font-medium text-ink-soft hover:text-ink sm:block">
+            All hampers →
+          </Link>
+        </Reveal>
+        <div className={rowClass}>
+          {hampers.map((product, i) => (
+            <Reveal key={product.id} delay={(i % 4) * 0.07} className={cardClass}>
+              <ProductCard product={product} />
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* 6 — Just arrived */}
+      <section className="container-x pt-14 md:pt-20">
+        <Reveal className="mb-8 flex items-end justify-between gap-6">
+          <h2 className="text-display max-w-md text-3xl font-semibold md:text-4xl">Just arrived</h2>
+          <Link href="/shop?sort=newest" className="link-underline hidden shrink-0 text-sm font-medium text-ink-soft hover:text-ink sm:block">
+            See what&apos;s new →
+          </Link>
+        </Reveal>
+        <div className={rowClass}>
+          {arrivals.map((product, i) => (
+            <Reveal key={product.id} delay={i * 0.07} className={cardClass}>
+              <ProductCard product={product} />
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* 7 — Pick up where you left off */}
+      <div className="pt-14 md:pt-20">
+        <RecentlyViewed />
+      </div>
     </>
   );
 }

@@ -20,7 +20,14 @@ import ProductImage from "@/components/ui/ProductImage";
 
 const FREE_DELIVERY_AT = 999;
 
-type Activity = "product" | "delivery" | "cart" | "reminder" | "continue";
+const SALE_UPDATES = [
+  "Festive Sale — up to 40% off",
+  "Free delivery over ₹999",
+  "Same-day delivery in metros",
+  "Personalise any gift — free",
+];
+
+type Activity = "product" | "delivery" | "cart" | "reminder" | "sale" | "continue";
 
 export default function NowBar() {
   const mounted = useMounted();
@@ -45,12 +52,18 @@ export default function NowBar() {
   const [index, setIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [now, setNow] = useState(() => Date.now());
+  const [saleIndex, setSaleIndex] = useState(0);
 
   useEffect(() => {
     if (!active) return;
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, [active]);
+
+  useEffect(() => {
+    const id = setInterval(() => setSaleIndex((i) => (i + 1) % SALE_UPDATES.length), 3200);
+    return () => clearInterval(id);
+  }, []);
 
   const onProduct = pathname.startsWith("/product/");
   const activities: Activity[] = [];
@@ -60,6 +73,7 @@ export default function NowBar() {
   if (active && signedIn) activities.push("delivery");
   if (items.length > 0) activities.push("cart");
   if (upcomingReminder && upcomingReminder.days <= 30 && signedIn) activities.push("reminder");
+  activities.push("sale");
   if (lastViewed && !onProduct) activities.push("continue");
 
   useEffect(() => {
@@ -352,6 +366,36 @@ export default function NowBar() {
                   </span>
                   <span className="shrink-0 rounded-full bg-cream px-4 py-2 text-xs font-bold text-ink">Find a gift</span>
                 </Link>
+              </motion.div>
+            ) : current === "sale" ? (
+              /* ---------- SALE UPDATES ---------- */
+              <motion.div key="sale" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+                <div className="flex items-center gap-3 px-3.5 py-2.5">
+                  <span className="grid size-11 shrink-0 place-items-center rounded-full bg-cream/12">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 15 15 9M20.5 12l-2-2.2.3-3-3-.6L14 1l-2 1.5L10 1 8.2 3.6l-3 .6.3 3-2 2.2 2 2.2-.3 3 3 .6L10 19l2-1.5L14 19l1.8-2.6 3-.6-.3-3z" />
+                      <circle cx="9.5" cy="9.5" r="0.5" /><circle cx="14.5" cy="14.5" r="0.5" />
+                    </svg>
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-xs text-cream/60">Offers</span>
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={saleIndex}
+                        initial={{ opacity: 0, y: 7 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -7 }}
+                        transition={{ duration: 0.3 }}
+                        className="block truncate text-sm font-semibold"
+                      >
+                        {SALE_UPDATES[saleIndex]}
+                      </motion.span>
+                    </AnimatePresence>
+                  </span>
+                  <Link href="/shop?tag=sale" className="shrink-0 rounded-full bg-cream px-4 py-2 text-sm font-bold text-ink transition-colors active:bg-gold">
+                    Shop
+                  </Link>
+                </div>
               </motion.div>
             ) : (
               /* ---------- CONTINUE ---------- */

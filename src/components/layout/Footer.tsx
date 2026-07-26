@@ -65,7 +65,7 @@ export default function Footer() {
       {/* Link grid */}
       <div className="container-x grid grid-cols-2 gap-x-6 gap-y-12 py-14 md:grid-cols-[2fr_1fr_1fr_1.2fr] md:py-20">
         <div className="col-span-2 md:col-span-1">
-          <Logo variant="full" className="h-20 w-auto" />
+          <Logo variant="full" className="!h-14 w-auto md:!h-20" />
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-ink-soft">{BRAND.description}</p>
           <div className="mt-6 flex gap-2">
             {SOCIALS.map((s) => (

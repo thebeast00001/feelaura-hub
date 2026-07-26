@@ -78,16 +78,7 @@ export default function ShopView({
   const base = category ? `/shop/${category}` : "/shop";
 
   return (
-    <div
-      className="transition-[background] duration-500"
-      style={
-        cat
-          ? {
-              background: `linear-gradient(180deg, hsl(${cat.hue} 74% 82%) 0%, hsl(${cat.hue} 62% 90%) 24%, hsl(${cat.hue} 45% 96%) 40%, var(--color-cream) 56%)`,
-            }
-          : undefined
-      }
-    >
+    <div>
       <div className="container-x pb-24 pt-28 md:pt-36">
       {/* Heading */}
       <Reveal>
@@ -106,9 +97,8 @@ export default function ShopView({
         )}
       </Reveal>
 
-      {/* Category chip bar — thumbnail chips that fill with the category colour */}
-      <div className="-mx-5 mt-8 px-5 sm:-mx-8 sm:px-8 lg:mx-0 lg:mt-10 lg:p-0">
-        <div className="no-scrollbar flex gap-2.5 overflow-x-auto pb-1 lg:flex-wrap">
+      {/* Category chip bar — edge-to-edge scroll on mobile, wraps on desktop */}
+      <div className="no-scrollbar -mx-5 mt-8 flex gap-2.5 overflow-x-auto px-5 pb-1 sm:-mx-8 sm:px-8 lg:mx-0 lg:mt-10 lg:flex-wrap lg:px-0">
           {/* All */}
           <Link
             href={buildHref("/shop", params, { page: undefined })}
@@ -176,7 +166,6 @@ export default function ShopView({
               </Link>
             );
           })}
-        </div>
       </div>
 
       {/* Toolbar */}

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
+import BannerMotif, { type Motif } from "./BannerMotif";
 
 interface Card {
   label: string;
@@ -22,169 +23,103 @@ interface Banner {
   gradient: string;
   glow: string;
   accentColor: string;
+  motif: Motif;
   cards: [Card, Card];
 }
 
 const BANNERS: Banner[] = [
   {
-    id: "curated",
-    eyebrow: "Biggest sale of the year",
-    title: "Curated for",
-    accent: "you.",
-    discount: "Get up to 40% off sitewide",
+    id: "festive-sale",
+    eyebrow: "",
+    title: "Gifts for every",
+    accent: "celebration.",
+    discount: "Up to 40% off this festive season",
     gradient: "linear-gradient(150deg,#c42126 0%,#a01a20 55%,#7a1418 100%)",
-    glow: "radial-gradient(60% 55% at 50% 0%, rgba(255,220,150,0.28) 0%, transparent 70%)",
+    glow: "radial-gradient(60% 55% at 50% 0%, rgba(255,220,150,0.3) 0%, transparent 70%)",
     accentColor: "#ffd9a8",
+    motif: "confetti",
     cards: [
+      { label: "Hampers", sub: "Festive boxes", href: "/shop/hampers", image: "/images/products/birthday-surprise-hamper.jpeg" },
       { label: "Mugs", sub: "From ₹299", href: "/shop/mugs", image: "/images/products/magic-colour-changing-mug.jpeg" },
-      { label: "Hampers", sub: "Curated boxes", href: "/shop/hampers", image: "/images/products/birthday-surprise-hamper.jpeg" },
+    ],
+  },
+  {
+    id: "rakhi",
+    eyebrow: "",
+    title: "Celebrate",
+    accent: "Raksha Bandhan.",
+    discount: "Thoughtful gifts to spoil your sibling",
+    gradient: "linear-gradient(150deg,#e8952f 0%,#d1481f 55%,#a81f1f 100%)",
+    glow: "radial-gradient(60% 55% at 50% 0%, rgba(255,224,176,0.34) 0%, transparent 70%)",
+    accentColor: "#ffe0b0",
+    motif: "rakhi",
+    cards: [
+      { label: "Hampers", sub: "Rakhi boxes", href: "/shop/hampers", image: "/images/products/best-friend-explosion-box.jpeg" },
+      { label: "Photo Frames", sub: "Shared memories", href: "/shop/photo-frames", image: "/images/products/photo-collage-frame.jpeg" },
     ],
   },
   {
     id: "memories",
-    eyebrow: "Personalised photo gifts",
-    title: "Made for",
-    accent: "memories.",
-    discount: "Your photos, made keepsakes",
-    gradient: "linear-gradient(150deg,#4a2560 0%,#5f2c72 55%,#7a2d63 100%)",
-    glow: "radial-gradient(60% 55% at 50% 0%, rgba(255,190,225,0.26) 0%, transparent 70%)",
-    accentColor: "#ffc4e0",
+    eyebrow: "",
+    title: "Memories, made",
+    accent: "magical.",
+    discount: "Frames, lamps & keepsakes to light up the season",
+    gradient: "linear-gradient(150deg,#2a4a7a 0%,#223f6b 55%,#193253 100%)",
+    glow: "radial-gradient(60% 55% at 50% 0%, rgba(200,225,255,0.3) 0%, transparent 70%)",
+    accentColor: "#cfe0ff",
+    motif: "bokeh",
     cards: [
       { label: "Photo Frames", sub: "Framed forever", href: "/shop/photo-frames", image: "/images/products/photo-collage-frame.jpeg" },
       { label: "LED Lamps", sub: "Your photos aglow", href: "/shop/led-lamps", image: "/images/products/rotating-photo-cube-lamp.jpeg" },
     ],
   },
   {
+    id: "hampers",
+    eyebrow: "",
+    title: "Hampers that",
+    accent: "dazzle.",
+    discount: "Beautifully packed boxes of joy",
+    gradient: "linear-gradient(150deg,#caa23a 0%,#b0842a 55%,#8a651f 100%)",
+    glow: "radial-gradient(60% 55% at 50% 0%, rgba(255,248,220,0.35) 0%, transparent 70%)",
+    accentColor: "#fff2c8",
+    motif: "ribbons",
+    cards: [
+      { label: "Hampers", sub: "Curated crates", href: "/shop/hampers", image: "/images/products/scrunchie-bottle-hamper.jpeg" },
+      { label: "Tote Bags", sub: "Hand-printed", href: "/shop/tote-bags", image: "/images/products/floral-bird-canvas-tote.jpeg" },
+    ],
+  },
+  {
     id: "prints",
-    eyebrow: "Prints & magazines",
-    title: "Print your",
-    accent: "story.",
+    eyebrow: "",
+    title: "Your story,",
+    accent: "printed.",
     discount: "Polaroids, prints & photo magazines",
-    gradient: "linear-gradient(150deg,#c9552e 0%,#b0842a 60%,#8a651f 100%)",
-    glow: "radial-gradient(60% 55% at 50% 0%, rgba(255,245,215,0.32) 0%, transparent 70%)",
-    accentColor: "#fff0c4",
+    gradient: "linear-gradient(150deg,#c9552e 0%,#a83d20 60%,#88301a 100%)",
+    glow: "radial-gradient(60% 55% at 50% 0%, rgba(255,240,210,0.32) 0%, transparent 70%)",
+    accentColor: "#ffe6c0",
+    motif: "photos",
     cards: [
       { label: "Photo Prints", sub: "Polaroids & 4×6", href: "/shop/photo-prints", image: "/images/products/retro-polaroid-prints.jpeg" },
       { label: "Magazines", sub: "A4 & A5", href: "/shop/magazines", image: "/images/products/personalised-photo-magazine.jpeg" },
     ],
   },
   {
-    id: "carry",
-    eyebrow: "Everyday & keepsakes",
-    title: "Carry the",
-    accent: "love.",
-    discount: "Totes & keychains for every day",
+    id: "little-touches",
+    eyebrow: "",
+    title: "Small gifts,",
+    accent: "big smiles.",
+    discount: "Fridge magnets & photo keychains",
     gradient: "linear-gradient(150deg,#3f7a52 0%,#2f6547 55%,#234f39 100%)",
     glow: "radial-gradient(60% 55% at 50% 0%, rgba(225,255,220,0.28) 0%, transparent 70%)",
     accentColor: "#c8f0cf",
-    cards: [
-      { label: "Tote Bags", sub: "Hand-printed", href: "/shop/tote-bags", image: "/images/products/floral-bird-canvas-tote.jpeg" },
-      { label: "Keychains", sub: "Photo sets", href: "/shop/keychains", image: "/images/products/photo-keychain-set.jpeg" },
-    ],
-  },
-  {
-    id: "display",
-    eyebrow: "Little moments",
-    title: "On",
-    accent: "display.",
-    discount: "Fridge magnets & magic mugs",
-    gradient: "linear-gradient(150deg,#2a1615 0%,#3a201e 55%,#1f100f 100%)",
-    glow: "radial-gradient(60% 55% at 50% 0%, rgba(255,200,160,0.22) 0%, transparent 70%)",
-    accentColor: "#ffc9a8",
+    motif: "stars",
     cards: [
       { label: "Fridge Magnets", sub: "Badge sets", href: "/shop/fridge-magnets", image: "/images/products/photo-fridge-magnet-set.jpeg" },
-      { label: "Magic Mugs", sub: "Reveal on heat", href: "/shop/mugs", image: "/images/products/heart-handle-photo-mug.jpeg" },
+      { label: "Keychains", sub: "Photo sets", href: "/shop/keychains", image: "/images/products/photo-keychain-set.jpeg" },
     ],
   },
 ];
 
-/** One promotional banner per occasion — shown in the "Shop by occasion" section. */
-export const OCCASION_BANNERS: Banner[] = [
-  {
-    id: "occ-birthday",
-    eyebrow: "For their birthday",
-    title: "Make their",
-    accent: "big day.",
-    discount: "Hampers, mugs & keepsakes they'll love",
-    gradient: "linear-gradient(150deg,#c42126 0%,#a01a20 55%,#7a1418 100%)",
-    glow: "radial-gradient(60% 55% at 50% 0%, rgba(255,220,150,0.28) 0%, transparent 70%)",
-    accentColor: "#ffd9a8",
-    cards: [
-      { label: "Hampers", sub: "Birthday boxes", href: "/shop/hampers", image: "/images/products/birthday-surprise-hamper.jpeg" },
-      { label: "Mugs", sub: "Magic & photo", href: "/shop/mugs", image: "/images/products/magic-colour-changing-mug.jpeg" },
-    ],
-  },
-  {
-    id: "occ-anniversary",
-    eyebrow: "For your anniversary",
-    title: "Celebrate",
-    accent: "the years.",
-    discount: "Frames, boxes & glowing lamps",
-    gradient: "linear-gradient(150deg,#7a2d63 0%,#5f2c72 55%,#4a2560 100%)",
-    glow: "radial-gradient(60% 55% at 50% 0%, rgba(255,190,225,0.26) 0%, transparent 70%)",
-    accentColor: "#ffc4e0",
-    cards: [
-      { label: "Photo Frames", sub: "Framed forever", href: "/shop/photo-frames", image: "/images/products/photo-collage-frame.jpeg" },
-      { label: "Hampers", sub: "Gift boxes", href: "/shop/hampers", image: "/images/products/evil-eye-gift-box.jpeg" },
-    ],
-  },
-  {
-    id: "occ-love",
-    eyebrow: "Love & romance",
-    title: "Say it with",
-    accent: "love.",
-    discount: "Lamps, heart mugs & keepsakes",
-    gradient: "linear-gradient(150deg,#d23a63 0%,#b02749 55%,#8a1c39 100%)",
-    glow: "radial-gradient(60% 55% at 50% 0%, rgba(255,215,225,0.3) 0%, transparent 70%)",
-    accentColor: "#ffdbe4",
-    cards: [
-      { label: "LED Lamps", sub: "Warm glow", href: "/shop/led-lamps", image: "/images/products/rotating-photo-cube-lamp.jpeg" },
-      { label: "Mugs", sub: "Heart handle", href: "/shop/mugs", image: "/images/products/heart-handle-photo-mug.jpeg" },
-    ],
-  },
-  {
-    id: "occ-congrats",
-    eyebrow: "Congratulations",
-    title: "Cheer their",
-    accent: "big win.",
-    discount: "Photo magazines & mug sets",
-    gradient: "linear-gradient(150deg,#caa23a 0%,#b0842a 60%,#8a651f 100%)",
-    glow: "radial-gradient(60% 55% at 50% 0%, rgba(255,245,215,0.32) 0%, transparent 70%)",
-    accentColor: "#fff0c4",
-    cards: [
-      { label: "Magazines", sub: "A4 & A5", href: "/shop/magazines", image: "/images/products/personalised-photo-magazine.jpeg" },
-      { label: "Mugs", sub: "Metallic set", href: "/shop/mugs", image: "/images/products/metallic-duo-mug-set.jpeg" },
-    ],
-  },
-  {
-    id: "occ-thankyou",
-    eyebrow: "Thank you gifts",
-    title: "A little",
-    accent: "thank you.",
-    discount: "Totes & photo keychains",
-    gradient: "linear-gradient(150deg,#3f7a52 0%,#2f6547 55%,#234f39 100%)",
-    glow: "radial-gradient(60% 55% at 50% 0%, rgba(225,255,220,0.28) 0%, transparent 70%)",
-    accentColor: "#c8f0cf",
-    cards: [
-      { label: "Tote Bags", sub: "Hand-printed", href: "/shop/tote-bags", image: "/images/products/floral-bird-canvas-tote.jpeg" },
-      { label: "Keychains", sub: "Photo sets", href: "/shop/keychains", image: "/images/products/photo-keychain-set.jpeg" },
-    ],
-  },
-  {
-    id: "occ-newbaby",
-    eyebrow: "For the new baby",
-    title: "Welcome,",
-    accent: "little one.",
-    discount: "Frames & first-photo prints",
-    gradient: "linear-gradient(150deg,#3a6ea5 0%,#2f5a86 55%,#244766 100%)",
-    glow: "radial-gradient(60% 55% at 50% 0%, rgba(215,235,255,0.3) 0%, transparent 70%)",
-    accentColor: "#d3e8ff",
-    cards: [
-      { label: "Photo Frames", sub: "Memories frame", href: "/shop/photo-frames", image: "/images/products/memories-collage-frame.jpeg" },
-      { label: "Photo Prints", sub: "Polaroids", href: "/shop/photo-prints", image: "/images/products/retro-polaroid-prints.jpeg" },
-    ],
-  },
-];
 
 const AUTOPLAY_MS = 2000;
 
@@ -220,7 +155,7 @@ export default function BannerCarousel({
 
   return (
     <section
-      className="container-x pb-4 pt-6 md:pb-8 md:pt-10"
+      className="container-x pb-4 pt-24 md:pb-8 md:pt-28"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-roledescription="carousel"
@@ -257,17 +192,12 @@ export default function BannerCarousel({
                 }}
               />
 
+              {/* Per-banner live motif */}
+              <BannerMotif type={banner.motif} color={banner.accentColor} reduce={!!reduce} />
+
               <div className="relative z-10 flex h-full flex-col justify-between p-5 sm:p-7 md:p-8">
                 {/* Heading */}
                 <div className="text-center">
-                  <motion.p
-                    initial={reduce ? false : { opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.12, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                    className="mb-2 inline-block rounded-full bg-white/15 px-3.5 py-1 text-[0.58rem] font-bold uppercase tracking-[0.2em] text-white/90 backdrop-blur-sm sm:text-[0.66rem]"
-                  >
-                    {banner.eyebrow}
-                  </motion.p>
                   <h2 className="text-display font-semibold leading-[0.95] text-white">
                     <motion.span
                       initial={reduce ? false : { opacity: 0, y: 16 }}
