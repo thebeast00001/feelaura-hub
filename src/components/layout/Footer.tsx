@@ -7,7 +7,7 @@ import Logo from "@/components/ui/Logo";
 const SOCIALS = [
   {
     label: "Instagram",
-    href: "#",
+    href: "https://www.instagram.com/feelaurahub_",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="18" height="18" rx="5" />
@@ -17,20 +17,21 @@ const SOCIALS = [
     ),
   },
   {
-    label: "Facebook",
-    href: "#",
+    label: "YouTube",
+    href: "https://www.youtube.com/shorts/7Ttewp1tBOw",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14 3h-2.5A3.5 3.5 0 0 0 8 6.5V9H6v3h2v9h3v-9h2.5l.5-3h-3V6.8c0-.5.4-.8.8-.8H14V3Z" />
+        <rect x="2" y="5" width="20" height="14" rx="4.5" />
+        <path d="M10 9.2l5 2.8-5 2.8V9.2Z" fill="currentColor" stroke="none" />
       </svg>
     ),
   },
   {
-    label: "X",
-    href: "#",
+    label: "Facebook",
+    href: "https://www.facebook.com/share/1HNFAjBmmb/",
     icon: (
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round">
-        <path d="M4 4l16 16M20 4 4 20" />
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 3h-2.5A3.5 3.5 0 0 0 8 6.5V9H6v3h2v9h3v-9h2.5l.5-3h-3V6.8c0-.5.4-.8.8-.8H14V3Z" />
       </svg>
     ),
   },
@@ -72,7 +73,9 @@ export default function Footer() {
               <a
                 key={s.label}
                 href={s.href}
-                aria-label={s.label}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${s.label} (opens in a new tab)`}
                 className="grid size-11 place-items-center rounded-full border border-line text-ink-soft transition-all duration-300 hover:border-ink hover:bg-ink hover:text-cream"
               >
                 {s.icon}
