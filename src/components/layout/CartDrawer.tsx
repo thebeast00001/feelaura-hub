@@ -61,7 +61,7 @@ export default function CartDrawer() {
             onDragEnd={(_, info) => {
               if (info.offset.y > 90 || info.velocity.y > 500) close();
             }}
-            className="fixed z-[70] flex flex-col overflow-hidden bg-cream shadow-2xl max-sm:inset-x-0 max-sm:bottom-0 max-sm:max-h-[88svh] max-sm:rounded-t-[1.8rem] sm:inset-y-0 sm:right-0 sm:w-full sm:max-w-md sm:rounded-l-[2rem]"
+            className="fixed z-[70] flex flex-col overflow-hidden bg-cream shadow-2xl max-sm:inset-x-0 max-sm:bottom-0 max-sm:h-[92svh] max-sm:rounded-t-[1.8rem] sm:inset-y-0 sm:right-0 sm:w-full sm:max-w-md sm:rounded-l-[2rem]"
           >
             {/* Grab handle — the only draggable area, so the item list scrolls freely */}
             <div
@@ -145,7 +145,8 @@ export default function CartDrawer() {
                   </div>
                 </div>
 
-                <ul className="min-h-0 flex-1 divide-y divide-line overflow-y-auto overscroll-contain px-6">
+                <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+                  <ul className="divide-y divide-line px-6">
                   <AnimatePresence initial={false}>
                     {items.map((item) => (
                       <motion.li
@@ -210,10 +211,9 @@ export default function CartDrawer() {
                       </motion.li>
                     ))}
                   </AnimatePresence>
-                </ul>
+                  </ul>
 
-                {/* Complete the gift — compact horizontal row, shown on all sizes */}
-                <div className="shrink-0">
+                  {/* Complete the gift — scrolls with the list so items stay visible */}
                   <Suggestions />
                 </div>
 

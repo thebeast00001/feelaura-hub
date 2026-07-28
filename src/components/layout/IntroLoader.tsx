@@ -23,7 +23,7 @@ export default function IntroLoader() {
       /* private mode */
     }
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const t = setTimeout(() => setPhase("exit"), seen || reduce ? 60 : 1450);
+    const t = setTimeout(() => setPhase("exit"), seen || reduce ? 60 : 800);
     return () => clearTimeout(t);
   }, []);
 
@@ -42,7 +42,7 @@ export default function IntroLoader() {
       aria-hidden
       initial={false}
       animate={phase === "exit" ? { y: "-100%" } : { y: 0 }}
-      transition={{ duration: 0.85, ease: [0.76, 0, 0.24, 1] }}
+      transition={{ duration: 0.65, ease: [0.76, 0, 0.24, 1] }}
       onAnimationComplete={() => phase === "exit" && setPhase("done")}
       className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-7 rounded-b-[3rem] bg-cream"
     >

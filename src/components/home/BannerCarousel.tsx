@@ -238,6 +238,7 @@ export default function BannerCarousel({
                           src={card.image}
                           alt={card.label}
                           fill
+                          priority={index === 0}
                           sizes="(max-width:768px) 45vw, 320px"
                           className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.08]"
                         />
@@ -269,7 +270,7 @@ export default function BannerCarousel({
           {banners.map((b, i) => (
             <button
               key={b.id}
-              aria-label={`Go to ${b.eyebrow}`}
+              aria-label={`Go to slide ${i + 1}`}
               aria-current={i === index}
               onClick={() => go(i, i > index ? 1 : -1)}
               className={cn(

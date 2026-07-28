@@ -21,6 +21,7 @@ const csp = [
   "form-action 'self'",
   "frame-ancestors 'none'",
   "object-src 'none'",
+  "upgrade-insecure-requests",
 ].join("; ");
 
 const nextConfig: NextConfig = {
@@ -30,6 +31,9 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname),
   images: {
     formats: ["image/avif", "image/webp"],
+    // Cache optimized images for a year so the optimizer isn't re-run on
+    // every request (source-keyed, so updated files still bust the cache).
+    minimumCacheTTL: 31536000,
   },
   poweredByHeader: false,
   async headers() {
@@ -51,7 +55,8 @@ const nextConfig: NextConfig = {
           { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
           {
             key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=()",
+            value:
+              "camera=(), microphone=(), geolocation=(), browsing-topics=(), interest-cohort=()",
           },
         ],
       },

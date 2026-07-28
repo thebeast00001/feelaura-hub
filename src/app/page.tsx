@@ -1,32 +1,29 @@
 import Link from "next/link";
+import Image from "next/image";
 import BannerCarousel from "@/components/home/BannerCarousel";
 import ReminderNudge from "@/components/home/ReminderNudge";
 import RecentlyViewed from "@/components/home/RecentlyViewed";
 import RecipientGrid from "@/components/home/RecipientGrid";
+import CategoryShelf from "@/components/home/CategoryShelf";
+import HScroller from "@/components/ui/HScroller";
 import Reveal from "@/components/ui/Reveal";
 import ProductCard from "@/components/ui/ProductCard";
-import ProductImage from "@/components/ui/ProductImage";
 import {
-  CATEGORIES,
-  OCCASIONS,
-  getProduct,
-  getCategoryLead,
   getFeatured,
   getNewArrivals,
   queryProducts,
 } from "@/lib/products";
 
-/** A thematically-fitting product photo for each occasion panel. */
-const OCCASION_HERO: Record<string, string> = {
-  birthday: "birthday-surprise-hamper",
-  anniversary: "evil-eye-gift-box",
-  "love-romance": "rotating-photo-cube-lamp",
-  congratulations: "personalised-photo-magazine",
-  "thank-you": "floral-bird-canvas-tote",
-  "new-baby": "photo-collage-frame",
-  housewarming: "metallic-duo-mug-set",
-  "just-because": "photo-keychain-set",
-};
+/** Festive occasion cards — full-bleed artwork with baked-in titles & dates. */
+const OCCASION_CARDS: Array<{ name: string; href: string; image: string }> = [
+  { name: "Raksha Bandhan", href: "/shop/hampers", image: "/images/occasions/raksha-bandhan.jpg" },
+  { name: "Girlfriend's Day", href: "/shop?occasion=love-romance", image: "/images/occasions/girlfriends-day.jpg" },
+  { name: "Friendship Day", href: "/shop?occasion=just-because", image: "/images/occasions/friendship-day.jpg" },
+  { name: "Anniversary", href: "/shop?occasion=anniversary", image: "/images/occasions/anniversary.jpg" },
+  { name: "Congratulations", href: "/shop?occasion=congratulations", image: "/images/occasions/congratulations.jpg" },
+  { name: "Thank You", href: "/shop?occasion=thank-you", image: "/images/occasions/thank-you.jpg" },
+  { name: "Baby Shower", href: "/shop?occasion=new-baby", image: "/images/occasions/baby-shower.jpg" },
+];
 
 const rowClass =
   "no-scrollbar max-md:-mx-5 max-md:-my-2 max-md:flex max-md:snap-x max-md:snap-mandatory max-md:gap-4 max-md:overflow-x-auto max-md:px-5 max-md:py-2 md:grid md:grid-cols-4 md:gap-6";
@@ -36,10 +33,6 @@ export default function HomePage() {
   const featured = getFeatured(8);
   const arrivals = getNewArrivals(4);
   const hampers = queryProducts({ category: "hampers", perPage: 8 }).items;
-  const occasionItems = OCCASIONS.slice(0, 6).map((o) => {
-    const hero = getProduct(OCCASION_HERO[o.slug] ?? "");
-    return { slug: o.slug, name: o.name, tagline: o.tagline, hue: o.hue, image: hero?.image ?? null };
-  });
 
   return (
     <>
@@ -56,37 +49,9 @@ export default function HomePage() {
             View all →
           </Link>
         </Reveal>
-        <div className="no-scrollbar max-md:-mx-5 max-md:-my-2 max-md:flex max-md:snap-x max-md:gap-3 max-md:overflow-x-auto max-md:px-5 max-md:py-2 md:grid md:grid-cols-4 md:gap-4">
-          {CATEGORIES.slice(0, 8).map((cat, i) => {
-            const lead = getCategoryLead(cat.slug);
-            return (
-              <Reveal
-                key={cat.slug}
-                delay={(i % 4) * 0.05}
-                y={0}
-                className="max-md:w-[38%] max-md:shrink-0 max-md:snap-start"
-              >
-                <Link
-                  href={`/shop/${cat.slug}`}
-                  className="press group relative block aspect-[4/5] overflow-hidden rounded-[1.4rem]"
-                >
-                  <ProductImage
-                    name={cat.name}
-                    hue={cat.hue}
-                    image={lead?.image ?? null}
-                    sizes="(max-width:768px) 46vw, 30vw"
-                    className="absolute inset-0 size-full"
-                  />
-                  <div aria-hidden className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-4">
-                    <p className="text-display text-lg font-semibold text-white md:text-xl">{cat.name}</p>
-                    <p className="mt-0.5 text-[0.7rem] text-white/75">{cat.tagline}</p>
-                  </div>
-                </Link>
-              </Reveal>
-            );
-          })}
-        </div>
+        <Reveal y={0} className="max-sm:-mx-5">
+          <CategoryShelf />
+        </Reveal>
       </section>
 
       {/* 3 — Shop by occasion */}
@@ -97,29 +62,35 @@ export default function HomePage() {
             Not sure? Try the Gift Finder →
           </Link>
         </Reveal>
-        <div className="no-scrollbar mt-8 max-md:-mx-5 max-md:-my-2 max-md:flex max-md:snap-x max-md:gap-3 max-md:overflow-x-auto max-md:px-5 max-md:py-2 md:mt-10 md:grid md:grid-cols-3 md:gap-4 lg:grid-cols-6">
-          {occasionItems.map((o, i) => (
-            <Reveal key={o.slug} delay={(i % 4) * 0.05} y={0} className="max-md:w-[38%] max-md:shrink-0 max-md:snap-start">
+        <HScroller
+          wrapperClassName="mt-8 md:mt-10"
+          className="-mx-5 gap-4 px-5 pb-1 snap-x snap-mandatory sm:-mx-8 sm:px-8 lg:mx-0 lg:px-0"
+        >
+          {OCCASION_CARDS.map((o, i) => (
+            <Reveal
+              key={o.name}
+              delay={(i % 3) * 0.05}
+              y={0}
+              className="w-[66%] shrink-0 snap-start sm:w-[38%] lg:w-[27%]"
+            >
               <Link
-                href={`/shop?occasion=${o.slug}`}
-                className="press group relative block aspect-[4/5] overflow-hidden rounded-[1.4rem]"
+                href={o.href}
+                aria-label={o.name}
+                className="press group block overflow-hidden rounded-[1.4rem]"
               >
-                <ProductImage
-                  name={o.name}
-                  hue={o.hue}
-                  image={o.image}
-                  sizes="(max-width:768px) 46vw, 30vw"
-                  className="absolute inset-0 size-full"
-                />
-                <div aria-hidden className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-4">
-                  <p className="text-display text-lg font-semibold text-white md:text-xl">{o.name}</p>
-                  <p className="mt-0.5 text-[0.7rem] text-white/75">{o.tagline}</p>
+                <div className="relative aspect-[3/2]">
+                  <Image
+                    src={o.image}
+                    alt={o.name}
+                    fill
+                    sizes="(max-width:768px) 78vw, 32vw"
+                    className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+                  />
                 </div>
               </Link>
             </Reveal>
           ))}
-        </div>
+        </HScroller>
       </section>
 
       {/* 3.5 — Gifts for… (recipient) */}
@@ -130,7 +101,7 @@ export default function HomePage() {
           </h2>
           <p className="mt-1 text-sm text-ink-soft">Shop by who you&apos;re spoiling.</p>
         </Reveal>
-        <Reveal delay={0.08}>
+        <Reveal delay={0.08} y={0}>
           <RecipientGrid />
         </Reveal>
       </section>

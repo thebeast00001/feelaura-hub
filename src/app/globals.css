@@ -4,18 +4,18 @@
    BRAND TOKENS — swap these when the client's real brand arrives.
 --------------------------------------------------------------------------- */
 @theme {
-  /* Feelaura Hub brand palette — sampled from the official logo */
-  --color-cream: #fcf5e3;
-  --color-cream-soft: #f4ebd3;
-  --color-surface: #fffdf6;
-  --color-ink: #2a1615;
+  /* Feelaura Hub brand palette — warm red + cream storefront scheme */
+  --color-cream: #faf1da;
+  --color-cream-soft: #f3e6ca;
+  --color-surface: #fffdf5;
+  --color-ink: #2a1413;
   --color-ink-soft: #6b4a44;
   --color-ink-faint: #9c837a;
-  --color-accent: #c42126;
-  --color-accent-deep: #9c191d;
+  --color-accent: #b3242a;
+  --color-accent-deep: #8f1c20;
   --color-gold: #c9a227;
   --color-sage: #8fa383;
-  --color-line: #e7dcc2;
+  --color-line: #e8d6bc;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-swift: cubic-bezier(0.55, 0, 0.1, 1);
