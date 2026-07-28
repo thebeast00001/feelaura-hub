@@ -6,6 +6,7 @@ import { cn, formatPrice } from "@/lib/utils";
 import ProductCard from "@/components/ui/ProductCard";
 import Reveal from "@/components/ui/Reveal";
 import SortSelect from "./SortSelect";
+import CategoryScroller from "./CategoryScroller";
 
 type ParamValue = string | string[] | undefined;
 
@@ -98,10 +99,11 @@ export default function ShopView({
       </Reveal>
 
       {/* Category chip bar — edge-to-edge scroll on mobile, wraps on desktop */}
-      <div className="no-scrollbar -mx-5 mt-8 flex gap-2.5 overflow-x-auto px-5 pb-1 sm:-mx-8 sm:px-8 lg:mx-0 lg:mt-10 lg:flex-wrap lg:px-0">
+      <CategoryScroller className="no-scrollbar -mx-5 mt-8 flex gap-2.5 overflow-x-auto px-5 pb-1 sm:-mx-8 sm:px-8 lg:mx-0 lg:mt-10 lg:flex-wrap lg:px-0">
           {/* All */}
           <Link
             href={buildHref("/shop", params, { page: undefined })}
+            data-active={!category ? "true" : undefined}
             className={cn(
               "group flex shrink-0 items-center gap-2 rounded-full border py-1.5 pl-1.5 pr-4 text-sm font-semibold transition-colors duration-300",
               !category
@@ -131,6 +133,7 @@ export default function ShopView({
               <Link
                 key={c.slug}
                 href={buildHref(`/shop/${c.slug}`, params, { page: undefined })}
+                data-active={active ? "true" : undefined}
                 style={
                   active
                     ? {
@@ -166,7 +169,7 @@ export default function ShopView({
               </Link>
             );
           })}
-      </div>
+      </CategoryScroller>
 
       {/* Toolbar */}
       <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border-y border-line py-4">
