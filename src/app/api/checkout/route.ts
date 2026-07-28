@@ -184,23 +184,31 @@ export async function POST(req: Request) {
     return NextResponse.json({ demo: true, success: true, orderRef });
   }
 
-  const { default: Stripe } = await import("stripe");
-  const stripe = new Stripe(secretKey);
+  try {
+    const { default: Stripe } = await import("stripe");
+    const stripe = new Stripe(secretKey);
 
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    line_items: resolved.map((item) => ({
-      price_data: {
-        currency: "inr",
-        product_data: { name: item.name },
-        unit_amount: item.price * 100, // paise
-      },
-      quantity: item.quantity,
-    })),
-    metadata: { pincode, deliveryDate, orderRef },
-    success_url: `${siteUrl}/checkout/success`,
-    cancel_url: `${siteUrl}/cart`,
-  });
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      line_items: resolved.map((item) => ({
+        price_data: {
+          currency: "inr",
+          product_data: { name: item.name },
+          unit_amount: Math.round(item.price * 100), // paise
+        },
+        quantity: item.quantity,
+      })),
+      metadata: { pincode, deliveryDate, orderRef },
+      success_url: `${siteUrl}/checkout/success`,
+      cancel_url: `${siteUrl}/cart`,
+    });
 
-  return NextResponse.json({ url: session.url, orderRef });
+    return NextResponse.json({ url: session.url, orderRef });
+  } catch (err) {
+    console.error("Stripe session creation failed:", err);
+    return NextResponse.json(
+      { error: "Payment could not be started. Please try again." },
+      { status: 502 }
+    );
+  }
 }

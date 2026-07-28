@@ -15,9 +15,10 @@
 # debug
 npm-debug.log*
 
-# env files
+# env files — ignore everything except the committed template
 .env
-.env*.local
+.env.*
+!.env.example
 
 # typescript
 *.tsbuildinfo
